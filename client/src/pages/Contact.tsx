@@ -1,0 +1,75 @@
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
+import { Mail, Phone, MapPin } from 'lucide-react';
+
+export default function Contact() {
+  return (
+    <div className="min-h-screen flex flex-col pt-4">
+      <Navbar />
+      <main className="flex-grow max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-16 md:py-24">
+        <h1 className="text-4xl md:text-5xl font-serif font-bold tracking-tight mb-8">Contact Us</h1>
+        <p className="text-xl text-muted-foreground leading-relaxed mb-12">
+          We'd love to hear from you. Please reach out with any questions, concerns, or feedback.
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+          <div className="space-y-8">
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 rounded-full border border-border flex items-center justify-center shrink-0">
+                <Mail className="w-5 h-5 text-muted-foreground" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-lg mb-1">Email</h3>
+                <p className="text-muted-foreground">ai.solutions@kalisoftai.in</p>
+                <p className="text-sm text-muted-foreground mt-2">We aim to respond to all emails within 24 hours.</p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 rounded-full border border-border flex items-center justify-center shrink-0">
+                <Phone className="w-5 h-5 text-muted-foreground" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-lg mb-1">Phone</h3>
+                <p className="text-muted-foreground">+1 (555) 123-4567</p>
+                <p className="text-sm text-muted-foreground mt-2">Monday-Friday, 9am-5pm EST</p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 rounded-full border border-border flex items-center justify-center shrink-0">
+                <MapPin className="w-5 h-5 text-muted-foreground" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-lg mb-1">Office</h3>
+                <p className="text-muted-foreground">123 Innovation Drive<br/>Tech District, CA 94043<br/>United States</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-muted border border-border rounded-3xl p-8">
+            <h3 className="text-2xl font-bold mb-6">Send a Message</h3>
+            <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+              <div>
+                <label className="block text-sm font-medium mb-1" htmlFor="name">Name</label>
+                <input type="text" id="name" className="w-full px-4 py-2 rounded-xl border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Your name" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1" htmlFor="email">Email</label>
+                <input type="email" id="email" className="w-full px-4 py-2 rounded-xl border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Your email address" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1" htmlFor="message">Message</label>
+                <textarea id="message" rows={4} className="w-full px-4 py-2 rounded-xl border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary" placeholder="How can we help you?"></textarea>
+              </div>
+              <button className="w-full bg-primary text-black font-semibold py-3 rounded-xl hover:bg-primary/90 transition-colors">
+                Send Message
+              </button>
+            </form>
+          </div>
+        </div>
+      </main>
+      <Footer />
+    </div>
+  );
+}
