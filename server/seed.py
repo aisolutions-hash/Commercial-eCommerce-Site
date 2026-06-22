@@ -3,8 +3,8 @@ import json
 import os
 import subprocess
 import sys
+import platform
 from pathlib import Path
-
 from datetime import datetime
 
 from app.database import async_session_factory, engine, Base
@@ -27,23 +27,42 @@ async def seed():
         print("client/src/data.ts not found.")
         sys.exit(1)
 
-    result = subprocess.run(
-        ["npx", "tsx", "-e",
-         "import {categories, products} from './src/data.ts'; console.log(JSON.stringify({categories, products}))"],
-        cwd=client_dir,
-        capture_output=True,
-        text=True,
-        check=True,
-    )
-    data = json.loads(result.stdout)
+    # Cross-platform npm/npx command
+    npm_cmd = "npm.cmd" if platform.system() == "Windows" else "npm"
+    
+    try:
+        result = subprocess.run(
+            [npm_cmd, "exec", "tsx", "--", "-e",
+             "import {categories, products} from './src/data.ts'; console.log(JSON.stringify({categories, products}))"],
+            cwd=client_dir,
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+    except FileNotFoundError:
+        print(f"Error: '{npm_cmd}' not found. Ensure Node.js is installed and in PATH.")
+        sys.exit(1)
+    except subprocess.CalledProcessError as e:
+        print(f"Error running tsx: {e.stderr}")
+        sys.exit(1)
+    
+    try:
+        data = json.loads(result.stdout)
+    except json.JSONDecodeError as e:
+        print(f"Error parsing JSON output: {e}")
+        print(f"stdout: {result.stdout}")
+        print(f"stderr: {result.stderr}")
+        sys.exit(1)
 
     async with async_session_factory() as session:
         async with session.begin():
+            # Check if database is already seeded
             existing = await session.get(Category, list(data["categories"])[0]["id"])
             if existing:
                 print("Database already seeded. Skipping.")
                 return
 
+            # Add categories
             for cat in data["categories"]:
                 session.add(Category(
                     id=cat["id"],
@@ -53,6 +72,7 @@ async def seed():
                     section=cat.get("section"),
                 ))
 
+            # Add products and reviews
             for prod in data["products"]:
                 features = prod.get("features") if prod.get("features") else None
                 session.add(Product(

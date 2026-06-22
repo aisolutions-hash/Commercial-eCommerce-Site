@@ -4,7 +4,7 @@ import { ShoppingCart, Heart, Search, Menu, X, Moon, Sun, User as UserIcon, LogO
 import { useStore } from '../store';
 
 export default function Navbar() {
-  const { cart, theme, toggleTheme, user, logout } = useStore();
+  const { cart, theme, toggleTheme, user, token, logout } = useStore();
   const [isOpen, setIsOpen] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -73,21 +73,21 @@ export default function Navbar() {
               )}
             </Link>
 
-            {user ? (
+            {token ? (
               <div className="relative">
                 <button 
                   onClick={() => setShowProfileMenu(!showProfileMenu)}
                   className="flex items-center gap-2 p-2 rounded-full hover:bg-muted transition-colors"
                 >
                   <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary-dark font-bold">
-                    {user.name.charAt(0).toUpperCase()}
+                    {user?.name?.charAt(0).toUpperCase() || 'U'}
                   </div>
                 </button>
                 {showProfileMenu && (
                   <div className="absolute right-0 mt-2 w-48 bg-card border border-border rounded-xl shadow-lg py-2">
                     <div className="px-4 py-2 border-b border-border mb-2">
-                      <p className="text-sm font-bold text-foreground truncate">{user.name}</p>
-                      <p className="text-xs text-muted-foreground truncate">{user.email}</p>
+                      <p className="text-sm font-bold text-foreground truncate">{user?.name || 'User'}</p>
+                      <p className="text-xs text-muted-foreground truncate">{user?.email || ''}</p>
                     </div>
                     <Link 
                       to="/profile"
@@ -156,15 +156,15 @@ export default function Navbar() {
             <Link to="/categories" className="block px-3 py-2 rounded-md text-base font-medium hover:bg-muted" onClick={() => setIsOpen(false)}>Categories</Link>
             <Link to="/wishlist" className="block px-3 py-2 rounded-md text-base font-medium hover:bg-muted" onClick={() => setIsOpen(false)}>Wishlist</Link>
             
-            {user ? (
+            {token ? (
               <div className="pt-4 mt-2 border-t border-border">
                 <div className="px-3 py-2 flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary-dark font-bold">
-                    {user.name.charAt(0).toUpperCase()}
+                    {user?.name?.charAt(0).toUpperCase() || 'U'}
                   </div>
                   <div>
-                    <p className="text-sm font-bold text-foreground">{user.name}</p>
-                    <p className="text-xs text-muted-foreground">{user.email}</p>
+                    <p className="text-sm font-bold text-foreground">{user?.name || 'User'}</p>
+                    <p className="text-xs text-muted-foreground">{user?.email || ''}</p>
                   </div>
                 </div>
                 <Link 

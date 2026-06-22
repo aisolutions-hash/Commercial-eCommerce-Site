@@ -2,12 +2,38 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { products } from '../data';
 import { useStore } from '../store';
 import { Star, ShoppingCart, Heart, ShieldCheck, Truck, RotateCcw, ArrowLeft } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { motion } from 'motion/react';
 import ImageWithFallback from '../components/ImageWithFallback';
+import { getProduct, ProductDetail } from '../lib/api';
+import { Product } from '../types';
+
+function toProduct(p: ProductDetail): Product {
+  return {
+    id: p.id,
+    name: p.name,
+    description: p.description || '',
+    longDescription: p.long_description || undefined,
+    price: p.price,
+    categoryId: p.category_id,
+    images: p.images,
+    rating: p.rating,
+    reviews: p.reviews.map((r) => ({
+      id: r.id,
+      userName: r.user_name,
+      rating: r.rating,
+      comment: r.comment || '',
+      date: r.date,
+    })),
+    features: p.features || undefined,
+    isFeatured: p.is_featured,
+    isContactForPrice: p.is_contact_for_price,
+    moq: p.moq || undefined,
+    uom: p.uom || undefined,
+  };
+}
 
 const parseInlineFormatting = (text: string) => {
   const parts = text.split(/(\*\*.*?\*\*|\*.*?\*)/g);
@@ -54,20 +80,40 @@ const renderRichDescription = (text: string) => {
 export default function ProductDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const product = products.find(p => p.id === id);
+  const [product, setProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const { addToCart, toggleWishlist, wishlist } = useStore();
-  const [quantity, setQuantity] = useState(product?.moq || 1);
+  const [quantity, setQuantity] = useState(1);
   const [activeImage, setActiveImage] = useState(0);
 
-  // Reset quantity when changing products
   useEffect(() => {
-    if (product) {
-      setQuantity(product.moq || 1);
+    if (!id) return;
+    setLoading(true);
+    setError('');
+    getProduct(id).then((data) => {
+      const p = toProduct(data);
+      setProduct(p);
+      setQuantity(p.moq || 1);
       setActiveImage(0);
-    }
-  }, [product?.id]);
+    }).catch((err) => {
+      setError(err.message || 'Product not found');
+    }).finally(() => setLoading(false));
+  }, [id]);
 
-  if (!product) {
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col pt-4">
+        <Navbar />
+        <main className="flex-grow flex items-center justify-center">
+          <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (error || !product) {
     return (
       <div className="min-h-screen flex flex-col pt-4">
         <Navbar />
@@ -98,7 +144,6 @@ export default function ProductDetails() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
           
-          {/* Image Gallery */}
           <div className="space-y-4">
             <div className="relative aspect-square rounded-[3rem] overflow-hidden bg-muted">
                <ImageWithFallback 
@@ -129,7 +174,6 @@ export default function ProductDetails() {
             )}
           </div>
 
-          {/* Product Info */}
           <div className="flex flex-col">
             <div className="mb-8">
               <div className="flex items-center gap-2 mb-2">
@@ -218,7 +262,6 @@ export default function ProductDetails() {
               </div>
             )}
 
-            {/* Trust Badges */}
             <div className="grid grid-cols-2 gap-4 mt-auto pt-8 border-t border-border">
                <div className="flex items-center gap-3 text-sm text-muted-foreground">
                  <ShieldCheck className="w-8 h-8 text-primary" />
@@ -236,7 +279,6 @@ export default function ProductDetails() {
           </div>
         </div>
 
-        {/* Reviews Section */}
         <div className="mt-24">
           <h2 className="text-3xl font-serif font-bold mb-8">Customer Reviews</h2>
           {product.reviews.length > 0 ? (

@@ -1,25 +1,65 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Carousel from '../components/Carousel';
 import ProductCard from '../components/ProductCard';
-import { categories, products } from '../data';
 import { ArrowRight, Megaphone } from 'lucide-react';
 import ImageWithFallback from '../components/ImageWithFallback';
+import { getCategories, getProducts, Category, ProductRead } from '../lib/api';
+import { Product } from '../types';
+
+function toProductType(p: ProductRead): Product {
+  return {
+    id: p.id,
+    name: p.name,
+    description: p.description || '',
+    longDescription: p.long_description || undefined,
+    price: p.price,
+    categoryId: p.category_id,
+    images: p.images,
+    rating: p.rating,
+    reviews: [],
+    features: p.features || undefined,
+    isFeatured: p.is_featured,
+    isContactForPrice: p.is_contact_for_price,
+    moq: p.moq || undefined,
+    uom: p.uom || undefined,
+  };
+}
 
 export default function Home() {
-  const featuredProducts = products.filter(p => p.isFeatured).slice(0, 3);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [featured, setFeatured] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    Promise.all([getCategories(), getProducts({ per_page: 50 })]).then(([cats, prods]) => {
+      setCategories(cats);
+      setFeatured(prods.items.filter((p) => p.is_featured).slice(0, 3).map(toProductType));
+    }).finally(() => setLoading(false));
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col pt-4">
+        <Navbar />
+        <main className="flex-grow flex items-center justify-center">
+          <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col pt-4">
       <Navbar />
       
       <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-        {/* Banner/Carousel */}
         <Carousel />
 
-        {/* Categories Section */}
         <section className="py-12">
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-3xl font-serif font-bold tracking-tight">Shop by Category</h2>
@@ -41,7 +81,7 @@ export default function Home() {
                 <Link to={`/categories?id=${category.id}`} className="group block relative h-64 rounded-[2rem] overflow-hidden shadow-sm">
                   <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors z-10" />
                   <ImageWithFallback 
-                    src={category.image} 
+                    src={category.image || ''} 
                     alt={category.name}
                     className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                     containerClassName="absolute inset-0 w-full h-full"
@@ -58,14 +98,13 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Featured Products */}
         <section className="py-16">
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-3xl font-serif font-bold tracking-tight">Featured Products</h2>
           </div>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {featuredProducts.map((product, idx) => (
+            {featured.map((product, idx) => (
               <motion.div
                 key={product.id}
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -120,13 +159,12 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Value Proposition / 'Cute' Banner */}
         <section className="my-16 bg-muted rounded-[3rem] p-8 md:p-16 flex flex-col md:flex-row items-center justify-between relative overflow-hidden">
            <div className="absolute -top-24 -right-24 w-64 h-64 bg-primary/20 rounded-full blur-3xl" />
            <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-primary/20 rounded-full blur-3xl" />
            
            <div className="max-w-xl relative z-10 text-center md:text-left mb-8 md:mb-0">
-             <h2 className="text-4xl font-serif font-bold mb-4">Quality packaging, delivered with care. ✨</h2>
+             <h2 className="text-4xl font-serif font-bold mb-4">Quality packaging, delivered with care.</h2>
              <p className="text-lg text-muted-foreground mb-6">
                Whether you're wrapping pallets or packing lunch, our curated selection of goods has the strength and sustainability you need.
              </p>

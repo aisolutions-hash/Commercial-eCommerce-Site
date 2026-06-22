@@ -1,11 +1,11 @@
 from datetime import datetime
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class UserRegister(BaseModel):
     email: str
-    password: str
+    password: str = Field(min_length=8)
     name: str
 
 

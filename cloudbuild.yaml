@@ -1,0 +1,70 @@
+steps:
+  # Step 1: Build backend image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/kalisoft-api:latest'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/kalisoft-api:${SHORT_SHA}'
+      - '-f'
+      - 'server/Dockerfile'
+      - 'server/'
+
+  # Step 2: Push backend image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'gcr.io/$PROJECT_ID/kalisoft-api'
+
+  # Step 3: Build frontend image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/kalisoft-web:latest'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/kalisoft-web:${SHORT_SHA}'
+      - '-f'
+      - 'client/Dockerfile'
+      - 'client/'
+
+  # Step 4: Push frontend image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'gcr.io/$PROJECT_ID/kalisoft-web'
+
+  # Step 5: Deploy backend to Cloud Run
+  - name: 'gcr.io/cloud-builders/gke-deploy'
+    args:
+      - run
+      - deploy
+      - kalisoft-api
+      - '--image=gcr.io/$PROJECT_ID/kalisoft-api:${SHORT_SHA}'
+      - '--region=${_REGION}'
+      - '--platform=managed'
+
+  # Step 6: Deploy frontend to Cloud Run
+  - name: 'gcr.io/cloud-builders/gke-deploy'
+    args:
+      - run
+      - deploy
+      - kalisoft-web
+      - '--image=gcr.io/$PROJECT_ID/kalisoft-web:${SHORT_SHA}'
+      - '--region=${_REGION}'
+      - '--platform=managed'
+
+images:
+  - 'gcr.io/$PROJECT_ID/kalisoft-api:latest'
+  - 'gcr.io/$PROJECT_ID/kalisoft-api:${SHORT_SHA}'
+  - 'gcr.io/$PROJECT_ID/kalisoft-web:latest'
+  - 'gcr.io/$PROJECT_ID/kalisoft-web:${SHORT_SHA}'
+
+timeout: '3600s'
+
+substitutions:
+  _REGION: 'us-central1'
+
+options:
+  machineType: 'N1_HIGHCPU_8'

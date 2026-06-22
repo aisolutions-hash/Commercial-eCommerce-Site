@@ -1,32 +1,59 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import ProductCard from '../components/ProductCard';
-import { categories, products } from '../data';
 import { motion } from 'motion/react';
 import { Filter, X } from 'lucide-react';
+import { getCategories, getProducts, Category, ProductRead } from '../lib/api';
+import { Product } from '../types';
+
+function toProductType(p: ProductRead): Product {
+  return {
+    id: p.id,
+    name: p.name,
+    description: p.description || '',
+    longDescription: p.long_description || undefined,
+    price: p.price,
+    categoryId: p.category_id,
+    images: p.images,
+    rating: p.rating,
+    reviews: [],
+    features: p.features || undefined,
+    isFeatured: p.is_featured,
+    isContactForPrice: p.is_contact_for_price,
+    moq: p.moq || undefined,
+    uom: p.uom || undefined,
+  };
+}
 
 export default function CategoryPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const initialCategory = searchParams.get('id') || 'all';
-  const searchQuery = searchParams.get('q') || '';
-  
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
-  
-  useEffect(() => {
-    const id = searchParams.get('id');
-    if (id) {
-      setSelectedCategory(id);
-    }
-  }, [searchParams]);
-
   const [minRating, setMinRating] = useState(0);
   const [maxPrice, setMaxPrice] = useState(50000);
   const [showFilters, setShowFilters] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const id = searchParams.get('id');
+    if (id) setSelectedCategory(id);
+  }, [searchParams]);
+
+  useEffect(() => {
+    Promise.all([getCategories(), getProducts({ per_page: 100 })]).then(([cats, prods]) => {
+      setCategories(cats);
+      setAllProducts(prods.items.map(toProductType));
+    }).finally(() => setLoading(false));
+  }, []);
+
+  const searchQuery = searchParams.get('q') || '';
 
   const filteredProducts = useMemo(() => {
-    return products.filter(p => {
+    return allProducts.filter(p => {
       if (searchQuery) {
         const lowerQ = searchQuery.toLowerCase();
         const categoryMatch = categories.find(c => c.id === p.categoryId)?.name.toLowerCase().includes(lowerQ);
@@ -39,7 +66,19 @@ export default function CategoryPage() {
       if (p.price > maxPrice) return false;
       return true;
     });
-  }, [selectedCategory, minRating, maxPrice, searchQuery]);
+  }, [allProducts, selectedCategory, minRating, maxPrice, searchQuery, categories]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col pt-4">
+        <Navbar />
+        <main className="flex-grow flex items-center justify-center">
+          <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col pt-4">
@@ -53,7 +92,7 @@ export default function CategoryPage() {
                 ? `Search Results for "${searchQuery}"`
                 : selectedCategory === 'all' 
                   ? 'All Products' 
-                  : categories.find(c => c.id === selectedCategory)?.name}
+                  : categories.find(c => c.id === selectedCategory)?.name || 'Products'}
             </h1>
             {searchQuery && (
               <button 
@@ -77,7 +116,6 @@ export default function CategoryPage() {
         </div>
 
         <div className="flex flex-col md:flex-row gap-8 lg:gap-12">
-          {/* Sidebar Filters */}
           <aside className={`w-full md:w-64 shrink-0 bg-card md:bg-transparent p-6 md:p-0 rounded-[2rem] md:rounded-none z-40 fixed md:relative inset-x-0 bottom-0 md:inset-auto max-h-[80vh] overflow-y-auto ${showFilters ? 'block shadow-[0_-10px_40px_rgba(0,0,0,0.1)] md:shadow-none' : 'hidden md:block'}`}>
              <div className="md:hidden flex justify-between items-center mb-6">
                 <h3 className="font-bold text-lg">Filters</h3>
@@ -150,7 +188,6 @@ export default function CategoryPage() {
              </div>
           </aside>
 
-          {/* Product Grid */}
           <div className="flex-1">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredProducts.map((product, idx) => (
@@ -166,13 +203,13 @@ export default function CategoryPage() {
             </div>
             {filteredProducts.length === 0 && (
               <div className="text-center py-20">
-                <div className="text-4xl mb-4">🥲</div>
+                <div className="text-4xl mb-4">—</div>
                 <h3 className="text-xl font-medium text-muted-foreground">No products found matching your criteria.</h3>
                 <button 
                   onClick={() => { 
                     setSelectedCategory('all'); 
                     setMinRating(0); 
-                    setMaxPrice(500); 
+                    setMaxPrice(50000); 
                     setSearchParams({}); 
                   }}
                   className="mt-4 px-6 py-2 bg-primary text-black rounded-full font-medium"

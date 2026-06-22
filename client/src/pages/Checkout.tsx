@@ -6,10 +6,13 @@ import { useStore } from '../store';
 import { Trash2, ArrowRight, ShieldCheck, CheckCircle2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import ImageWithFallback from '../components/ImageWithFallback';
+import { placeOrder } from '../lib/api';
 
 export default function Checkout() {
-  const { cart, updateQuantity, removeFromCart, clearCart, user } = useStore();
+  const { cart, updateQuantity, removeFromCart, clearCart, user, token } = useStore();
   const [step, setStep] = useState<'cart' | 'shipping' | 'payment' | 'success'>('cart');
+  const [error, setError] = useState('');
+  const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
   
   const subtotal = cart.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
@@ -17,10 +20,27 @@ export default function Checkout() {
   const shipping = subtotal > 100 ? 0 : 15;
   const total = subtotal + tax + shipping;
 
-  const handleCompleteOrder = (e: React.FormEvent) => {
+  const handleCompleteOrder = async (e: React.FormEvent) => {
     e.preventDefault();
-    setStep('success');
-    clearCart();
+    if (!token) {
+      navigate('/auth?redirect=/checkout');
+      return;
+    }
+    setError('');
+    setSubmitting(true);
+    try {
+      const items = cart.map((item) => ({
+        product_id: item.product.id,
+        quantity: item.quantity,
+      }));
+      await placeOrder(items);
+      clearCart();
+      setStep('success');
+    } catch (err: any) {
+      setError(err.message || 'Failed to place order');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   if (step === 'success') {
@@ -42,7 +62,7 @@ export default function Checkout() {
                  <CheckCircle2 className="w-12 h-12 text-primary" />
                </motion.div>
                <h1 className="text-4xl font-serif font-bold mb-4">Order Confirmed!</h1>
-               <p className="text-muted-foreground text-lg mb-8">Thank you for shopping at KaliSoft AI Marketplace. Your order #KALI-{Math.floor(Math.random()*10000)} is being processed.</p>
+               <p className="text-muted-foreground text-lg mb-8">Thank you for shopping at KaliSoft AI Marketplace. Your order is being processed.</p>
                <Link to="/" className="bg-foreground text-background px-8 py-3 rounded-full font-bold hover:bg-primary hover:text-black transition-colors block w-full sm:w-auto">
                  Continue Shopping
                </Link>
@@ -62,11 +82,15 @@ export default function Checkout() {
           {step === 'cart' ? 'Your Cart' : 'Checkout'}
         </h1>
 
+        {error && (
+          <div className="bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-500/20 rounded-xl px-4 py-3 mb-4 text-sm font-medium">
+            {error}
+          </div>
+        )}
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-          {/* Main Content Area */}
           <div className="lg:col-span-2 space-y-8">
             
-            {/* Steps indicator */}
             {step !== 'cart' && (
               <div className="flex items-center gap-4 text-sm font-medium mb-8">
                 <button onClick={() => setStep('cart')} className="text-muted-foreground hover:text-primary transition-colors">Cart</button>
@@ -184,8 +208,8 @@ export default function Checkout() {
 
                 <div className="pt-6 flex justify-between items-center">
                   <button type="button" onClick={() => setStep('shipping')} className="text-muted-foreground hover:text-foreground font-medium">Back</button>
-                  <button type="submit" className="bg-primary text-black px-8 py-3 rounded-full font-bold hover:bg-primary-dark transition-colors flex items-center gap-2">
-                    <ShieldCheck className="w-5 h-5" /> Pay Rs. {total.toFixed(2)}
+                  <button type="submit" disabled={submitting} className="bg-primary text-black px-8 py-3 rounded-full font-bold hover:bg-primary-dark transition-colors flex items-center gap-2 disabled:opacity-50">
+                    <ShieldCheck className="w-5 h-5" /> {submitting ? 'Processing...' : `Pay Rs. ${total.toFixed(2)}`}
                   </button>
                 </div>
               </motion.form>
@@ -193,7 +217,6 @@ export default function Checkout() {
 
           </div>
 
-          {/* Order Summary Sidebar */}
           {cart.length > 0 && (
             <div className="lg:col-span-1">
               <div className="bg-card border border-border rounded-[2rem] p-6 sticky top-24 shadow-sm">
@@ -220,7 +243,7 @@ export default function Checkout() {
                 {step === 'cart' && (
                   <button 
                     onClick={() => {
-                      if (!user) {
+                      if (!token) {
                         navigate('/auth?redirect=/checkout');
                       } else {
                         setStep('shipping');

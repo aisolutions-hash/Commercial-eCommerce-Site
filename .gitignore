@@ -1,0 +1,48 @@
+# Documentation files (keep in local, don't push to git)
+DEPLOYMENT.md
+DEPLOYMENT_INDEX.md
+DEPLOYMENT_QUICK_START.md
+NEON_DEPLOYMENT.md
+NEON_QUICK_START.md
+SECRETS_MANAGEMENT.md
+TROUBLESHOOTING.md
+PRE_PRODUCTION_CHECKLIST.md
+
+# Keep README.md (project documentation)
+# !README.md
+
+# Environment variables
+.env
+.env.local
+.env.production
+server/.env.production
+client/.env.production
+
+# Dependencies
+node_modules/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build outputs
+dist/
+build/
+*.egg-info/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
