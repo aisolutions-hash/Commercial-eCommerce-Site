@@ -175,31 +175,23 @@ gcloud auth configure-docker gcr.io --quiet
 success "Docker authenticated with Google Cloud"
 
 # ============================================================================
-# STEP 7: Build Backend Image
+# STEP 7: Build and Push Backend Image (Using Cloud Build)
 # ============================================================================
 
-print_header "STEP 7: Building Backend Docker Image"
+print_header "STEP 7: Building & Pushing Backend Image (Cloud Build)"
 
-info "Building backend API image..."
-cd server
+info "Submitting backend build to Google Cloud Build..."
+info "This builds in Google's infrastructure (no local network issues!)"
+info "Estimated time: 3-5 minutes..."
+echo ""
 
-docker build \
-  -t gcr.io/$PROJECT_ID/$API_SERVICE:latest \
-  -t gcr.io/$PROJECT_ID/$API_SERVICE:$(git rev-parse --short HEAD 2>/dev/null || echo "local") \
-  . || error "Backend image build failed"
+gcloud builds submit server \
+  --tag=gcr.io/$PROJECT_ID/$API_SERVICE:latest \
+  --project=$PROJECT_ID \
+  --quiet || error "Backend build failed"
 
-success "Backend image built successfully"
-
-# ============================================================================
-# STEP 8: Push Backend Image
-# ============================================================================
-
-print_header "STEP 8: Pushing Backend Image to Cloud Registry"
-
-info "Uploading backend image to Google Container Registry..."
-docker push gcr.io/$PROJECT_ID/$API_SERVICE:latest || error "Failed to push backend image"
-
-success "Backend image pushed to gcr.io/$PROJECT_ID/$API_SERVICE:latest"
+success "Backend image built and pushed to gcr.io/$PROJECT_ID/$API_SERVICE:latest"
+info "Build completed in Google Cloud (more reliable than local push!)"
 
 # ============================================================================
 # STEP 9: Deploy Backend to Cloud Run
@@ -236,37 +228,29 @@ BACKEND_URL=$(gcloud run services describe $API_SERVICE \
 success "Backend URL: $BACKEND_URL"
 
 # ============================================================================
-# STEP 10: Build Frontend Image
+# STEP 10: Build and Push Frontend Image (Using Cloud Build)
 # ============================================================================
 
-print_header "STEP 10: Building Frontend Docker Image"
+print_header "STEP 10: Building & Pushing Frontend Image (Cloud Build)"
 
-cd ../client
+info "Submitting frontend build to Google Cloud Build..."
+info "This builds in Google's infrastructure (no local network issues!)"
+info "Estimated time: 3-5 minutes..."
+echo ""
 
-info "Building frontend image..."
-docker build \
-  -t gcr.io/$PROJECT_ID/$WEB_SERVICE:latest \
-  -t gcr.io/$PROJECT_ID/$WEB_SERVICE:$(git rev-parse --short HEAD 2>/dev/null || echo "local") \
-  . || error "Frontend image build failed"
+gcloud builds submit client \
+  --tag=gcr.io/$PROJECT_ID/$WEB_SERVICE:latest \
+  --project=$PROJECT_ID \
+  --quiet || error "Frontend build failed"
 
-success "Frontend image built successfully"
-
-# ============================================================================
-# STEP 11: Push Frontend Image
-# ============================================================================
-
-print_header "STEP 11: Pushing Frontend Image to Cloud Registry"
-
-info "Uploading frontend image to Google Container Registry..."
-docker push gcr.io/$PROJECT_ID/$WEB_SERVICE:latest || error "Failed to push frontend image"
-
-success "Frontend image pushed to gcr.io/$PROJECT_ID/$WEB_SERVICE:latest"
+success "Frontend image built and pushed to gcr.io/$PROJECT_ID/$WEB_SERVICE:latest"
+info "Build completed in Google Cloud (more reliable than local push!)"
 
 # ============================================================================
-# STEP 12: Deploy Frontend to Cloud Run
+# STEP 11: Deploy Frontend to Cloud Run
 # ============================================================================
 
-print_header "STEP 12: Deploying Frontend to Cloud Run"
+print_header "STEP 11: Deploying Frontend to Cloud Run"
 
 info "Deploying frontend service to Cloud Run..."
 
@@ -292,10 +276,10 @@ FRONTEND_URL=$(gcloud run services describe $WEB_SERVICE \
 success "Frontend URL: $FRONTEND_URL"
 
 # ============================================================================
-# STEP 13: Database Migrations
+# STEP 12: Database Migrations
 # ============================================================================
 
-print_header "STEP 13: Database Migrations"
+print_header "STEP 12: Database Migrations"
 
 info "To run database migrations, connect to your Neon database and run:"
 echo ""
