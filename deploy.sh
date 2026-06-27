@@ -209,10 +209,7 @@ gcloud run deploy $API_SERVICE \
   --cpu=1 \
   --timeout=540 \
   --allow-unauthenticated \
-  --set-env-vars DATABASE_URL="$DATABASE_URL" \
-  --set-env-vars JWT_SECRET="$JWT_SECRET" \
-  --set-env-vars CORS_ORIGINS="https://$DOMAIN,http://localhost:3000" \
-  --set-env-vars APP_URL="https://$DOMAIN" \
+  --set-env-vars DATABASE_URL="$DATABASE_URL",JWT_SECRET="$JWT_SECRET",CORS_ORIGINS="https://$DOMAIN,http://localhost:3000",APP_URL="https://$DOMAIN" \
   --project=$PROJECT_ID \
   --quiet || error "Backend deployment failed"
 
