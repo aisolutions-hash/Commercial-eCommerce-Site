@@ -201,6 +201,14 @@ print_header "STEP 9: Deploying Backend to Cloud Run"
 
 info "Deploying backend service to Cloud Run..."
 
+# Create temporary env file to avoid escaping issues
+cat > /tmp/backend-env.yaml << EOF
+DATABASE_URL: $DATABASE_URL
+JWT_SECRET: $JWT_SECRET
+CORS_ORIGINS: https://$DOMAIN,http://localhost:3000
+APP_URL: https://$DOMAIN
+EOF
+
 gcloud run deploy $API_SERVICE \
   --image=gcr.io/$PROJECT_ID/$API_SERVICE:latest \
   --platform=managed \
@@ -209,9 +217,12 @@ gcloud run deploy $API_SERVICE \
   --cpu=1 \
   --timeout=540 \
   --allow-unauthenticated \
-  --set-env-vars DATABASE_URL="$DATABASE_URL",JWT_SECRET="$JWT_SECRET",CORS_ORIGINS="https://$DOMAIN,http://localhost:3000",APP_URL="https://$DOMAIN" \
+  --env-vars-file=/tmp/backend-env.yaml \
   --project=$PROJECT_ID \
   --quiet || error "Backend deployment failed"
+
+# Clean up temp file
+rm -f /tmp/backend-env.yaml
 
 success "Backend deployed to Cloud Run"
 
