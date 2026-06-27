@@ -14,6 +14,10 @@ config = context.config
 
 db_url = os.getenv("DATABASE_URL")
 if db_url:
+    # asyncpg does not support 'sslmode' in the query string; it uses 'ssl' instead.
+    if "asyncpg" in db_url and "sslmode" in db_url:
+        db_url = db_url.replace("sslmode", "ssl")
+
     config.set_main_option("sqlalchemy.url", db_url)
 
 if config.config_file_name is not None:
