@@ -95,8 +95,9 @@ app.include_router(contact.router)
 async def health():
     db_ok = True
     try:
+        from sqlalchemy import text
         async with engine.connect() as conn:
-            await conn.execute(await conn.connection.get_dbapi_type(20))
+            await conn.execute(text("SELECT 1"))
     except Exception as e:
         logger.error("Health check failed: %s", e)
         db_ok = False
