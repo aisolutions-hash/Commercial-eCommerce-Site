@@ -268,7 +268,7 @@ gcloud run deploy $WEB_SERVICE \
   --region=$REGION \
   --memory=256Mi \
   --allow-unauthenticated \
-  --set-env-vars VITE_API_BASE_URL="$BACKEND_URL" \
+  --set-env-vars VITE_API_BASE_URL="$BACKEND_URL/api" \
   --project=$PROJECT_ID \
   --quiet || error "Frontend deployment failed"
 

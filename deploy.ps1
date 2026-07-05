@@ -71,7 +71,7 @@ gcloud builds submit client --tag="gcr.io/$ProjectId/$WebService`:latest" --proj
 Write-Host "OK Frontend image built and pushed" -ForegroundColor Green
 
 Write-Header "STEP 10: Deploying Frontend to Cloud Run"
-gcloud run deploy $WebService --image=gcr.io/$ProjectId/$WebService:latest --platform=managed --region=$Region --memory=256Mi --allow-unauthenticated --set-env-vars VITE_API_BASE_URL="$BackendUrl" --project=$ProjectId --quiet
+gcloud run deploy $WebService --image=gcr.io/$ProjectId/$WebService:latest --platform=managed --region=$Region --memory=256Mi --allow-unauthenticated --set-env-vars VITE_API_BASE_URL="$BackendUrl/api" --project=$ProjectId --quiet
 
 $FrontendUrl = (gcloud run services describe $WebService --platform=managed --region=$Region --format='value(status.url)' --project=$ProjectId).Trim()
 Write-Host "OK Frontend URL: $FrontendUrl" -ForegroundColor Green
