@@ -88,7 +88,11 @@ export const products: Product[] = [
     features: ['8-35µm thickness', '300-400% elongation', 'Tear resistant (400-500 GMS/Sht)', 'High tensile strength (1-1.5 kg/25mm)'],
     moq: 300,
     uom: 'KGM',
-    reviews: [{ id: 'r1', userName: 'John D.', rating: 5, comment: 'Excellent quality for our warehouse.', date: '2023-10-01' }]
+    reviews: [
+      { id: 'r1', userName: 'John D.', rating: 5, comment: 'Excellent quality for our warehouse.', date: '2023-10-01' },
+      { id: 'r1b', userName: 'Priya S.', rating: 4, comment: 'Good roll consistency. Will reorder for our factory.', date: '2024-02-14' },
+      { id: 'r1c', userName: 'Mike R.', rating: 5, comment: 'Holds up well for heavy pallet loads. Highly recommended.', date: '2024-05-22' }
+    ]
   },
   {
     id: 'p-poly-bag',
@@ -284,7 +288,11 @@ export const products: Product[] = [
     rating: 4.9,
     isFeatured: true,
     features: ['Microwave safe', 'Zero plastic', 'Sturdy design'],
-    reviews: [{ id: 'r2', userName: 'Alice G.', rating: 5, comment: 'Perfect for our eco-friendly catering!', date: '2023-11-12' }]
+    reviews: [
+      { id: 'r2', userName: 'Alice G.', rating: 5, comment: 'Perfect for our eco-friendly catering!', date: '2023-11-12' },
+      { id: 'r2b', userName: 'Rohan K.', rating: 5, comment: 'Sturdy and compostable. Guests loved them.', date: '2024-01-08' },
+      { id: 'r2c', userName: 'Emma T.', rating: 4, comment: 'Great for events, slightly heavier than paper but much greener.', date: '2024-03-19' }
+    ]
   },
   {
     id: 'p-bagasse-bowls',
@@ -322,7 +330,11 @@ export const products: Product[] = [
     images: ['https://loremflickr.com/800/800/canvas,tote,bag?lock=24'],
     rating: 4.6,
     features: ['100% Organic Cotton', 'Reinforced handles', 'Machine washable'],
-    reviews: [{ id: 'r3', userName: 'Sarah L.', rating: 4, comment: 'Very sturdy, use it every day.', date: '2023-12-05' }]
+    reviews: [
+      { id: 'r3', userName: 'Sarah L.', rating: 4, comment: 'Very sturdy, use it every day.', date: '2023-12-05' },
+      { id: 'r3b', userName: 'David P.', rating: 5, comment: 'Best canvas tote I have bought for groceries.', date: '2024-02-02' },
+      { id: 'r3c', userName: 'Anjali M.', rating: 4, comment: 'Nice print area for our company logo. Durable.', date: '2024-04-11' }
+    ]
   },
   {
     id: 'p-jute-tote',

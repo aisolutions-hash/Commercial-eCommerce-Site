@@ -60,6 +60,7 @@ npm run dev   # :3000, proxies /api -> :8000
 | GET | `/api/wishlist` | JWT | Wishlist items |
 | POST | `/api/wishlist/{productId}` | JWT | Add to wishlist |
 | DELETE | `/api/wishlist/{productId}` | JWT | Remove from wishlist |
+| POST | `/api/products/{id}/reviews` | - | Submit human review |
 
 ## Database Schema
 

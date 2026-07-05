@@ -72,6 +72,12 @@ export interface ReviewRead {
   date: string;
 }
 
+export interface ReviewCreate {
+  user_name: string;
+  rating: number;
+  comment: string | null;
+}
+
 export interface ProductDetail extends ProductRead {
   reviews: ReviewRead[];
 }
@@ -126,6 +132,13 @@ export async function getProducts(params?: {
 
 export async function getProduct(id: string): Promise<ProductDetail> {
   return request<ProductDetail>(`/products/${encodeURIComponent(id)}`);
+}
+
+export async function submitReview(productId: string, data: ReviewCreate): Promise<ReviewRead> {
+  return request<ReviewRead>(`/products/${encodeURIComponent(productId)}/reviews`, {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
 }
 
 export async function login(email: string, password: string): Promise<{ access_token: string; token_type: string }> {
