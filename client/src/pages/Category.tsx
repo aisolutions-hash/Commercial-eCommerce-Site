@@ -3,7 +3,6 @@ import { useSearchParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import ProductCard from '../components/ProductCard';
-import { motion } from 'motion/react';
 import { Filter, X } from 'lucide-react';
 import { getCategories, getProducts, Category, ProductRead } from '../lib/api';
 import { Product } from '../types';
@@ -190,16 +189,14 @@ export default function CategoryPage() {
 
           <div className="flex-1">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredProducts.map((product, idx) => (
-                <motion.div
-                  key={product.id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: idx * 0.05 }}
-                >
-                  <ProductCard product={product} />
-                </motion.div>
+              {filteredProducts.slice(0, 24).map((product) => (
+                <ProductCard key={product.id} product={product} />
               ))}
+              {filteredProducts.length > 24 && (
+                <div className="col-span-full text-center py-8 text-muted-foreground">
+                  +{filteredProducts.length - 24} more products. Refine filters to see all.
+                </div>
+              )}
             </div>
             {filteredProducts.length === 0 && (
               <div className="text-center py-20">

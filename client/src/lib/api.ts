@@ -8,7 +8,6 @@ let getToken: () => string | null = () => null;
  */
 export function setTokenGetter(fn: () => string | null) {
   getToken = fn;
-  console.log('[API] Token getter initialized');
 }
 
 async function request<T>(path: string, options: RequestInit = {}): Promise<T> {

@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class ReviewRead(BaseModel):
@@ -16,5 +16,5 @@ class ReviewRead(BaseModel):
 
 class ReviewCreate(BaseModel):
     user_name: str
-    rating: int
+    rating: int = Field(ge=1, le=5)
     comment: str | None = None

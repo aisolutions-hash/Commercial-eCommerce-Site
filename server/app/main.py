@@ -2,19 +2,22 @@ import logging
 import os
 import time
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 import sentry_sdk
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIASGIMiddleware
 from slowapi.util import get_remote_address
+from starlette.exceptions import HTTPException
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import Response
 
 from app.config import settings
-from app.database import engine
+from app.database import Base, engine
 from app.logging_config import setup_logging
 from app.routers import auth, categories, contact, orders, products, users, wishlist
 
@@ -60,6 +63,19 @@ class RequestLoggingMiddleware(BaseHTTPMiddleware):
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     logger.info("Starting application")
+    from sqlalchemy import text
+    try:
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+            for col in ["google_id"]:
+                try:
+                    await conn.execute(text(f"ALTER TABLE users ADD COLUMN IF NOT EXISTS {col} VARCHAR(255)"))
+                except Exception:
+                    pass
+            await conn.execute(text("SELECT 1"))
+            logger.info("Database pool warmed up")
+    except Exception as e:
+        logger.warning("DB warm-up failed (non-fatal): %s", e)
     yield
     logger.info("Shutting down application")
     await engine.dispose()
@@ -89,6 +105,23 @@ app.include_router(users.router)
 app.include_router(orders.router)
 app.include_router(wishlist.router)
 app.include_router(contact.router)
+
+
+STATIC_DIR = Path(__file__).parent.parent / "static"
+
+
+class SPAStaticFiles(StaticFiles):
+    async def get_response(self, path: str, scope):
+        try:
+            return await super().get_response(path, scope)
+        except HTTPException as e:
+            if e.status_code == 404:
+                return await super().get_response("index.html", scope)
+            raise
+
+
+if STATIC_DIR.exists():
+    app.mount("/", SPAStaticFiles(directory=str(STATIC_DIR), html=True), name="static")
 
 
 @app.get("/api/health")

@@ -1,22 +1,30 @@
 import logging
 import os
+from uuid import uuid4
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.schemas.contact import ContactInquiry, ContactResponse
+from app.database import get_db
+from app.models.contact import ContactInquiry
+from app.schemas.contact import ContactInquiry as ContactInquirySchema, ContactResponse
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/contact", tags=["contact"])
 
 
 @router.post("", response_model=ContactResponse)
-async def submit_contact(inquiry: ContactInquiry):
-    logger.info(
-        "Contact inquiry from %s (%s): %.100s",
-        inquiry.name,
-        inquiry.email,
-        inquiry.message,
+async def submit_contact(inquiry: ContactInquirySchema, db: AsyncSession = Depends(get_db)):
+    inquiry_record = ContactInquiry(
+        id=str(uuid4()),
+        name=inquiry.name,
+        email=inquiry.email,
+        message=inquiry.message,
     )
+    db.add(inquiry_record)
+    await db.commit()
+
+    logger.info("Contact inquiry saved: %s (%s)", inquiry.name, inquiry.email)
 
     notify_email = os.getenv("CONTACT_NOTIFY_EMAIL")
     if notify_email:

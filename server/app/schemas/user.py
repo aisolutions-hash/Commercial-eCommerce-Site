@@ -1,16 +1,16 @@
 from datetime import datetime
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, EmailStr, Field
 
 
 class UserRegister(BaseModel):
-    email: str
+    email: EmailStr
     password: str = Field(min_length=8)
     name: str
 
 
 class UserLogin(BaseModel):
-    email: str
+    email: EmailStr
     password: str
 
 

@@ -247,8 +247,12 @@ info "Estimated time: 3-5 minutes..."
 echo ""
 
 gcloud builds submit client \
+<<<<<<< Updated upstream
   --config=cloudbuild.yaml \
   --substitutions=_VITE_API_BASE_URL="$BACKEND_URL" \
+=======
+  --tag=gcr.io/$PROJECT_ID/$WEB_SERVICE:latest \
+>>>>>>> Stashed changes
   --project=$PROJECT_ID \
   --quiet || error "Frontend build failed"
 
@@ -269,6 +273,10 @@ gcloud run deploy $WEB_SERVICE \
   --region=$REGION \
   --memory=256Mi \
   --allow-unauthenticated \
+<<<<<<< Updated upstream
+=======
+  --set-env-vars VITE_API_BASE_URL="$BACKEND_URL" \
+>>>>>>> Stashed changes
   --project=$PROJECT_ID \
   --quiet || error "Frontend deployment failed"
 

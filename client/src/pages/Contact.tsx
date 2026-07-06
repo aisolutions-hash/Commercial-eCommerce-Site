@@ -58,8 +58,8 @@ export default function Contact() {
               </div>
               <div>
                 <h3 className="font-semibold text-lg mb-1">Phone</h3>
-                <p className="text-muted-foreground">+1 (555) 123-4567</p>
-                <p className="text-sm text-muted-foreground mt-2">Monday-Friday, 9am-5pm EST</p>
+                <p className="text-muted-foreground">+91-8605136378</p>
+                <p className="text-sm text-muted-foreground mt-2">Monday-Friday, 9am-5pm IST</p>
               </div>
             </div>
 
@@ -69,7 +69,7 @@ export default function Contact() {
               </div>
               <div>
                 <h3 className="font-semibold text-lg mb-1">Office</h3>
-                <p className="text-muted-foreground">123 Innovation Drive<br/>Tech District, CA 94043<br/>United States</p>
+                <p className="text-muted-foreground">4PV3+XR4, MIDC Nagapur<br/>Ahilyanagar, Maharashtra 414111<br/>India</p>
               </div>
             </div>
           </div>

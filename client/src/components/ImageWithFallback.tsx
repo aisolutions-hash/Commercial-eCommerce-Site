@@ -24,7 +24,7 @@ export default function ImageWithFallback({
   return (
     <div className={cn("relative overflow-hidden bg-muted flex items-center justify-center", containerClassName)}>
       {isLoading && !hasError && (
-        <div className="absolute inset-0 flex items-center justify-center bg-muted/30 backdrop-blur-sm z-10">
+        <div className="absolute inset-0 flex items-center justify-center bg-muted/30 z-10">
           <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
         </div>
       )}

@@ -53,21 +53,24 @@ export const useStore = create<AppState>()(
         },
 
         restoreSession: async () => {
-          const { token } = get();
-          if (!token) {
+          const tokenAtStart = get().token;
+          if (!tokenAtStart) {
             console.log('[Auth] No stored token found');
             return;
           }
           try {
             console.log('[Auth] Restoring session with stored token');
             const profile = await getProfile();
+            if (get().token !== tokenAtStart) return;
             set({
               user: { name: profile.name, email: profile.email },
             });
             console.log('[Auth] Session restored successfully for:', profile.email);
           } catch (err) {
             console.error('[Auth] Session restoration failed:', err);
-            set({ token: null, user: null });
+            if (get().token === tokenAtStart) {
+              set({ token: null, user: null });
+            }
           }
         },
 

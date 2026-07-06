@@ -16,22 +16,20 @@ export default function ProductCard({ product }: ProductCardProps) {
   const isInCart = cart.some(item => item.product.id === product.id);
 
   return (
-    <motion.div 
-      whileHover={{ y: -5 }}
-      className="group relative bg-card text-card-foreground rounded-[var(--radius-2xl)] overflow-hidden border border-border/50 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col"
+    <div className="group relative bg-card text-card-foreground rounded-[var(--radius-2xl)] overflow-hidden border border-border/50 shadow-md hover:-translate-y-1 transition-[transform] duration-200 flex flex-col"
     >
       <div className="relative aspect-square overflow-hidden bg-muted">
         <Link to={`/product/${product.id}`} className="block w-full h-full">
           <ImageWithFallback 
             src={product.images[0]} 
             alt={product.name} 
-            className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+            className="w-full h-full object-cover object-center group-hover:scale-105 transition-[transform] duration-500"
             containerClassName="w-full h-full"
           />
         </Link>
         <button 
           onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleWishlist(product.id); }}
-          className="absolute top-3 right-3 p-2 rounded-full bg-background/80 backdrop-blur-sm text-foreground hover:text-primary hover:scale-110 transition-all z-10"
+          className="absolute top-3 right-3 p-2 rounded-full bg-background/80 text-foreground hover:text-primary hover:scale-110 transition-[transform,color] z-10"
         >
           <Heart className={cn("h-5 w-5", isWishlisted && "fill-primary text-primary")} />
         </button>
@@ -100,6 +98,6 @@ export default function ProductCard({ product }: ProductCardProps) {
           )}
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
