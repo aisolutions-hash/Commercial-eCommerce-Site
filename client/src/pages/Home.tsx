@@ -31,15 +31,25 @@ function toProductType(p: ProductRead): Product {
 
 export default function Home() {
   const [categories, setCategories] = useState<Category[]>([]);
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [featured, setFeatured] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     Promise.all([getCategories(), getProducts({ per_page: 50 })]).then(([cats, prods]) => {
       setCategories(cats);
-      setFeatured(prods.items.filter((p) => p.is_featured).slice(0, 3).map(toProductType));
+      const typed = prods.items.map(toProductType);
+      setAllProducts(typed);
+      setFeatured(typed.filter((p) => p.is_featured).slice(0, 3));
     }).finally(() => setLoading(false));
   }, []);
+
+  const productsByCategory: Record<string, Product[]> = {};
+  for (const p of allProducts) {
+    const cid = p.categoryId || '__none__';
+    if (!productsByCategory[cid]) productsByCategory[cid] = [];
+    productsByCategory[cid].push(p);
+  }
 
   if (loading) {
     return (
@@ -63,39 +73,48 @@ export default function Home() {
         <section className="py-12">
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-3xl font-serif font-bold tracking-tight">Shop by Category</h2>
-            <Link to="/categories" className="text-primary hover:text-primary-dark font-medium flex items-center gap-1">
-              View All <ArrowRight className="w-4 h-4" />
-            </Link>
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {categories.map((category, idx) => (
-              <motion.div
-                key={category.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.1 }}
-                whileHover={{ y: -5 }}
-              >
-                <Link to={`/categories?id=${category.id}`} className="group block relative h-64 rounded-[2rem] overflow-hidden shadow-sm">
-                  <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors z-10" />
-                  <ImageWithFallback 
-                    src={category.image || ''} 
-                    alt={category.name}
-                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                    containerClassName="absolute inset-0 w-full h-full"
-                  />
-                  <div className="absolute inset-x-0 bottom-0 p-6 z-20">
-                    <h3 className="text-white font-bold text-xl mb-1">{category.name}</h3>
-                    <p className="text-gray-200 text-sm line-clamp-2 opacity-0 group-hover:opacity-100 transition-opacity transform translate-y-2 group-hover:translate-y-0 duration-300">
-                      {category.description}
-                    </p>
+
+          {categories.filter(c => (productsByCategory[c.id]?.length || 0) > 0).map((cat, ci) => {
+            const products = (productsByCategory[cat.id] || []).slice(0, 3);
+            return (
+              <div key={cat.id} className="py-10 even:bg-muted/30 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8">
+                <div className="flex items-end justify-between mb-6">
+                  <div>
+                    <h3 className="text-2xl font-serif font-bold">{cat.name}</h3>
+                    <p className="text-muted-foreground text-sm mt-0.5">{cat.description}</p>
                   </div>
-                </Link>
-              </motion.div>
-            ))}
-          </div>
+                  <Link
+                    to={`/categories?id=${cat.id}`}
+                    className="hidden sm:flex items-center gap-1 text-sm font-medium text-primary hover:underline shrink-0"
+                  >
+                    View All <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                  {products.map((product, idx) => (
+                    <motion.div
+                      key={product.id}
+                      initial={{ opacity: 0, y: 10 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: idx * 0.05 }}
+                    >
+                      <ProductCard product={product} />
+                    </motion.div>
+                  ))}
+                </div>
+                <div className="mt-5 text-center sm:hidden">
+                  <Link
+                    to={`/categories?id=${cat.id}`}
+                    className="inline-flex items-center gap-1.5 text-sm font-medium text-primary border border-primary/30 px-5 py-2.5 rounded-full hover:bg-primary hover:text-black transition-colors"
+                  >
+                    View All {cat.name} <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </div>
+              </div>
+            );
+          })}
         </section>
 
         <section className="py-16">

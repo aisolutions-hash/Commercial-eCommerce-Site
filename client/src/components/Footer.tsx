@@ -19,9 +19,7 @@ export default function Footer() {
             <h4 className="font-bold text-lg mb-4 text-white">Categories</h4>
             <ul className="space-y-2 text-sm text-gray-400">
               <li><Link to="/categories?id=industrial-packaging" className="hover:text-primary transition-colors">Industrial Packaging</Link></li>
-              <li><Link to="/categories?id=sustainable-tableware" className="hover:text-primary transition-colors">Sustainable Tableware</Link></li>
-              <li><Link to="/categories?id=eco-honeycomb" className="hover:text-primary transition-colors">Eco Honeycomb</Link></li>
-              <li><Link to="/categories?id=tote-bags" className="hover:text-primary transition-colors">Tote Bags</Link></li>
+
             </ul>
           </div>
           

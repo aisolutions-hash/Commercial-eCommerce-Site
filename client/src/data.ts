@@ -9,27 +9,6 @@ export const categories: Category[] = [
     section: 'packaging'
   },
   {
-    id: 'sustainable-tableware',
-    name: 'Sustainable Tableware',
-    description: 'Eco-friendly plates and bowls made from sugarcane waste.',
-    image: 'https://images.pexels.com/photos/8251778/pexels-photo-8251778.jpeg?_gl=1*19pus8i*_ga*MTI5NDYxMTI0NS4xNzc3MzcxMTc5*_ga_8JE65Q40S6*czE3NzczNzExNzgkbzEkZzEkdDE3NzczNzE1MjMkajU5JGwwJGgw',
-    section: 'packaging'
-  },
-  {
-    id: 'eco-honeycomb',
-    name: 'Eco Honeycomb Covers',
-    description: 'Innovative and sustainable honeycomb paper packaging.',
-    image: 'https://images.pexels.com/photos/12515076/pexels-photo-12515076.jpeg?_gl=1*jtuhif*_ga*MTI5NDYxMTI0NS4xNzc3MzcxMTc5*_ga_8JE65Q40S6*czE3NzczNzExNzgkbzEkZzEkdDE3NzczNzE1NjQkajE4JGwwJGgw',
-    section: 'packaging'
-  },
-  {
-    id: 'tote-bags',
-    name: 'Tote Bags',
-    description: 'Stylish, reusable, and durable tote bags for everyday carry.',
-    image: 'https://images.pexels.com/photos/30037036/pexels-photo-30037036.jpeg?_gl=1*1is71p*_ga*MTI5NDYxMTI0NS4xNzc3MzcxMTc5*_ga_8JE65Q40S6*czE3NzczNzExNzgkbzEkZzEkdDE3NzczNzE2MzckajgkbDAkaDA',
-    section: 'packaging'
-  },
-  {
     id: 'sales-growth-automation',
     name: 'Sales & Growth Automation',
     description: 'AI-driven tools to accelerate sales and scale your business.',
@@ -256,11 +235,12 @@ export const products: Product[] = [
     id: 'p-bubble-wrap',
     name: 'Protective Bubble Wrap (LDPE)',
     description: 'Low-density polyethylene film with air-filled bubbles for shock absorption and protection.',
-    longDescription: "**Bubble wrap** is a protective packaging material primarily made of low-density polyethylene (LDPE) film with characteristic air-filled bubbles. Key specifications include bubble size, material thickness (GSM/gauge), and various functional properties like anti-static protection.\n\n**Material Composition**\nBubble wrap is composed primarily of polyethylene resin, often with added components to enhance properties.\n* **Main Material**: Low-density polyethylene (LDPE) film.\n* **Additives**: Other additives can be mixed in to modify properties:\n  * Nylon is sometimes included for added strength and better air retention.\n  * Antistatic agents are used for pink-colored anti-static bubble wrap to dissipate static charges, protecting sensitive electronic components.\n  * Colorants are used to indicate specific types (e.g., green for recycled content) or for custom branding.\n\n**Common Specifications**\nSpecifications vary based on intended use, but several common options are available in the market.\n* **Material**: Polyethylene (PE), specifically LDPE\n* **Bubble Diameter**: Ranges from 6 mm (0.24 inches) to 26 mm (1 inch) or more. Common standard sizes are 1/8\", 3/16\", 5/16\", and 1/2\".\n* **Bubble Height**: Ranges up to 4 mm (small bubble) to 7 mm or more (large bubble).\n* **Film Thickness**: Often measured in Gauge (e.g., 400 gauge) or GSM (grams per square meter), with common ranges like 40 GSM to 80 GSM for standard rolls.\n* **Roll Dimensions**: Typically available in widths of 0.5 meters, 1 meter, 1.2 meters, and 1.5 meters, with lengths often in 50m or 100m rolls.\n* **Properties**: Lightweight, moisture-resistant, shock-absorbent, buoyant, and reusable.\n\n**Specialized Types**\n* **Anti-Static Bubble Wrap**: Colored pink and designed to prevent static charge buildup, essential for packaging electronics.\n* **Heavy-Duty**: Features thicker film and/or larger, more durable bubbles for enhanced protection against drops and impacts.\n* **Inflatable**: A newer form of bubble wrap (e.g., Sealed Air's iBubble Wrap) where flat sheets are inflated by the user on-site, saving storage and transport space. These connected bubbles cannot be \"popped\" individually.",
+    longDescription: "**Bubble wrap** is a protective packaging material primarily made of low-density polyethylene (LDPE) film with characteristic air-filled bubbles. Key specifications include bubble size, material thickness (GSM/gauge), and various functional properties like anti-static protection.\n\n**Material Composition**\nBubble wrap is composed primarily of polyethylene resin, often with added components to enhance properties.\n* **Main Material**: Low-density polyethylene (LDPE) film.\n* **Additives**: Other additives can be mixed in to modify properties:\n  * Nylon is sometimes included for added strength and better air retention.\n  * Antistatic agents are used for pink-colored anti-static bubble wrap to dissipate static charges, protecting sensitive electronic components.\n  * Colorants are used to indicate specific types (e.g., green for recycled content) or for custom branding.\n\n**Common Specifications**\nSpecifications vary based on intended use, but several common options are available in the market.\n* **Material**: Polyethylene (PE), specifically LDPE\n* **Bubble Diameter**: Ranges from 6 mm (0.24 inches) to 26 mm (1 inch) or more. Common standard sizes are 1/8\", 3/16\", 5/16\", and 1/2\".\n* **Bubble Height**: Ranges up to 4 mm (small bubble) to 7 mm or more (large bubble).\n* **Film Thickness**: Often measured in Gauge (e.g., 400 gauge) or GSM (grams per square meter), with common ranges like 40 GSM to 80 GSM for standard rolls.\n* **Roll Dimensions**: Typically available in widths of 0.5 meters, 1 meter, 1.2 meters, and 1.5 meters, with lengths often in 50m or 100m rolls.\n* **Properties**: Lightweight, moisture-resistant, shock-absorbent, buoyant, and reusable.\n\n**Specialized Types**\n* **Anti-Static Bubble Wrap**: Colored pink and designed to prevent static charge buildup, essential for packaging electronics.\n* **Heavy-Duty**: Features thicker film and/or larger, more durable bubbles for enhanced protection against drops and impacts.\n*... (line truncated to 2000 chars)
     price: 28.00,
     categoryId: 'industrial-packaging',
     images: ['https://images.pexels.com/photos/7829815/pexels-photo-7829815.jpeg'],
     rating: 4.8,
+    isFeatured: true,
     features: ['Small to large bubbles (6-26mm)', '40 to 80 GSM standard thickness', 'Anti-static variants available', 'Lightweight and moisture-resistant'],
     reviews: []
   },
@@ -277,76 +257,6 @@ export const products: Product[] = [
     reviews: []
   },
 
-  // Sustainable Tableware
-  {
-    id: 'p-bagasse-plates',
-    name: 'Sugarcane Bagasse Plates (50 Pack)',
-    description: 'Biodegradable and compostable plates made from 100% sugarcane fiber.',
-    price: 18.99,
-    categoryId: 'sustainable-tableware',
-    images: ['https://images.pexels.com/photos/28542217/pexels-photo-28542217.jpeg'],
-    rating: 4.9,
-    isFeatured: true,
-    features: ['Microwave safe', 'Zero plastic', 'Sturdy design'],
-    reviews: [
-      { id: 'r2', userName: 'Alice G.', rating: 5, comment: 'Perfect for our eco-friendly catering!', date: '2023-11-12' },
-      { id: 'r2b', userName: 'Rohan K.', rating: 5, comment: 'Sturdy and compostable. Guests loved them.', date: '2024-01-08' },
-      { id: 'r2c', userName: 'Emma T.', rating: 4, comment: 'Great for events, slightly heavier than paper but much greener.', date: '2024-03-19' }
-    ]
-  },
-  {
-    id: 'p-bagasse-bowls',
-    name: 'Sugarcane Fiber Bowls (50 Pack)',
-    description: 'Eco-friendly deep bowls perfect for soups and salads.',
-    price: 16.50,
-    categoryId: 'sustainable-tableware',
-    images: ['https://images.pexels.com/photos/35482197/pexels-photo-35482197.jpeg'],
-    rating: 4.7,
-    features: ['Leak-proof', 'Compostable', 'Heat resistant'],
-    reviews: []
-  },
-
-  // Eco Honeycomb
-  {
-    id: 'p-honeycomb-wrap',
-    name: 'Honeycomb Cushioning Wrap',
-    description: 'The ultimate zero-waste alternative to bubble wrap. Die-cut kraft paper expands into a 3D honeycomb structure.',
-    price: 32.00,
-    categoryId: 'eco-honeycomb',
-    images: ['https://images.pexels.com/photos/36507958/pexels-photo-36507958.jpeg'],
-    rating: 4.8,
-    isFeatured: true,
-    features: ['Plastic-free', 'Interlocking design', 'Shock absorbent'],
-    reviews: []
-  },
-
-  // Tote Bags
-  {
-    id: 'p-canvas-tote',
-    name: 'Classic Cotton Canvas Tote',
-    description: 'Heavyweight natural cotton tote bag perfect for groceries and daily essentials.',
-    price: 14.50,
-    categoryId: 'tote-bags',
-    images: ['https://loremflickr.com/800/800/canvas,tote,bag?lock=24'],
-    rating: 4.6,
-    features: ['100% Organic Cotton', 'Reinforced handles', 'Machine washable'],
-    reviews: [
-      { id: 'r3', userName: 'Sarah L.', rating: 4, comment: 'Very sturdy, use it every day.', date: '2023-12-05' },
-      { id: 'r3b', userName: 'David P.', rating: 5, comment: 'Best canvas tote I have bought for groceries.', date: '2024-02-02' },
-      { id: 'r3c', userName: 'Anjali M.', rating: 4, comment: 'Nice print area for our company logo. Durable.', date: '2024-04-11' }
-    ]
-  },
-  {
-    id: 'p-jute-tote',
-    name: 'Eco Jute Shopping Tote',
-    description: 'Rustic and highly durable tote bag made from natural jute fibers.',
-    price: 16.00,
-    categoryId: 'tote-bags',
-    images: ['https://loremflickr.com/800/800/jute,shopping,bag?lock=25'],
-    rating: 4.8,
-    features: ['Biodegradable', 'Large capacity', 'Water-resistant lining'],
-    reviews: []
-  },
   // Sales & Growth Automation
   {
     id: 'p-ai-pitch-engine',
@@ -358,6 +268,7 @@ export const products: Product[] = [
     categoryId: 'sales-growth-automation',
     images: ['https://images.pexels.com/photos/16461434/pexels-photo-16461434.jpeg'],
     rating: 4.8,
+    isFeatured: true,
     features: ['Personalization at scale', 'CRM Integration', 'A/B Testing'],
     moq: 1,
     uom: 'License',
@@ -434,6 +345,7 @@ export const products: Product[] = [
     categoryId: 'procurement-supply-chain-ai',
     images: ['https://images.pexels.com/photos/35541612/pexels-photo-35541612.jpeg'],
     rating: 4.6,
+    isFeatured: true,
     features: ['Automated PO matching', 'Vendor portal', 'Spend analytics'],
     moq: 1,
     uom: 'Platform',

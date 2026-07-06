@@ -23,27 +23,6 @@ const slides: Slide[] = [
   },
   {
     id: 2,
-    title: "Sustainable Tableware",
-    subtitle: "Eco-friendly plates and bowls made from sugarcane waste.",
-    image: "https://images.pexels.com/photos/8251778/pexels-photo-8251778.jpeg?_gl=1*19pus8i*_ga*MTI5NDYxMTI0NS4xNzc3MzcxMTc5*_ga_8JE65Q40S6*czE3NzczNzExNzgkbzEkZzEkdDE3NzczNzE1MjMkajU5JGwwJGgw",
-    link: "/categories?id=sustainable-tableware"
-  },
-  {
-    id: 3,
-    title: "Eco Honeycomb Covers",
-    subtitle: "Innovative and sustainable honeycomb paper packaging.",
-    image: "https://images.pexels.com/photos/12515076/pexels-photo-12515076.jpeg?_gl=1*jtuhif*_ga*MTI5NDYxMTI0NS4xNzc3MzcxMTc5*_ga_8JE65Q40S6*czE3NzczNzExNzgkbzEkZzEkdDE3NzczNzE1NjQkajE4JGwwJGgw",
-    link: "/categories?id=eco-honeycomb"
-  },
-  {
-    id: 4,
-    title: "Eco-Friendly Tote Bags",
-    subtitle: "Stylish, reusable, and durable tote bags for everyday carry.",
-    image: "https://images.pexels.com/photos/30037036/pexels-photo-30037036.jpeg?_gl=1*1is71p*_ga*MTI5NDYxMTI0NS4xNzc3MzcxMTc5*_ga_8JE65Q40S6*czE3NzczNzExNzgkbzEkZzEkdDE3NzczNzE2MzckajgkbDAkaDA.",
-    link: "/categories?id=tote-bags"
-  },
-  {
-    id: 5,
     title: "Advertise With Us",
     subtitle: "Reach thousands of industrial packaging buyers every day. Blend seamlessly into our marketplace.",
     image: "https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg",
@@ -51,7 +30,7 @@ const slides: Slide[] = [
     buttonText: "Learn More"
   },
   {
-    id: 6,
+    id: 3,
     title: "Tanvi Enterprises",
     subtitle: "Your trusted partner for quality products and services.",
     image: "/tanvi%20enterprises.jpeg",
@@ -59,7 +38,7 @@ const slides: Slide[] = [
     buttonText: "Learn More"
   },
   {
-    id: 7,
+    id: 4,
     title: "Shree Krishna Enterprises",
     subtitle: "Delivering excellence and quality you can depend on.",
     image: "/shree%20krishna%20enterprises.jpeg",
