@@ -4,6 +4,7 @@ import { motion } from 'motion/react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Carousel from '../components/Carousel';
+import TrustedBy from '../components/TrustedBy';
 import ProductCard from '../components/ProductCard';
 import { ArrowRight, Megaphone } from 'lucide-react';
 import ImageWithFallback from '../components/ImageWithFallback';
@@ -69,6 +70,7 @@ export default function Home() {
       
       <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <Carousel />
+        <TrustedBy />
 
         <section className="py-12">
           <div className="flex items-center justify-between mb-8">
