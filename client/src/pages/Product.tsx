@@ -179,13 +179,13 @@ export default function ProductDetails() {
 
   const handleSubmitReview = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!product || !reviewName.trim() || reviewRating < 1 || reviewRating > 5) return;
+    if (!product || !user || reviewRating < 1 || reviewRating > 5) return;
     setReviewSubmitting(true);
     setReviewError('');
     setReviewSuccess(false);
     try {
       const newReview = await submitReview(product.id, {
-        user_name: reviewName.trim(),
+        user_name: user.name,
         rating: reviewRating,
         comment: reviewComment.trim() || null,
       });
@@ -398,37 +398,30 @@ export default function ProductDetails() {
             <div className="lg:col-span-2 space-y-6">
               <div className="bg-card border border-border p-6 rounded-[2rem] shadow-sm">
                 <h3 className="font-semibold text-lg mb-4">Write a human review</h3>
+                {!user ? (
+                  <p className="text-muted-foreground text-sm">
+                    <Link to="/auth" className="text-primary hover:underline font-medium">Login</Link> to write a review.
+                  </p>
+                ) : (
                 <form onSubmit={handleSubmitReview} className="space-y-4">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium mb-1">Your name</label>
-                      <div className="flex items-center gap-2 bg-muted rounded-full px-4 py-2">
-                        <User className="w-4 h-4 text-muted-foreground" />
-                        <input
-                          type="text"
-                          value={reviewName}
-                          onChange={(e) => setReviewName(e.target.value)}
-                          placeholder="John D."
-                          className="bg-transparent flex-1 outline-none text-sm"
-                          required
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-1">Rating</label>
-                      <div className="flex items-center gap-2 bg-muted rounded-full px-4 py-2 w-fit">
-                        {[1, 2, 3, 4, 5].map((n) => (
-                          <button
-                            key={n}
-                            type="button"
-                            onClick={() => setReviewRating(n)}
-                            className="focus:outline-none"
-                            aria-label={`Rate ${n} stars`}
-                          >
-                            <Star className={cn("w-6 h-6 transition-colors", n <= reviewRating ? "fill-primary text-primary" : "text-muted")} />
-                          </button>
-                        ))}
-                      </div>
+                  <div className="flex items-center gap-2 bg-muted rounded-full px-4 py-2 text-sm text-muted-foreground w-fit">
+                    <User className="w-4 h-4" />
+                    <span>{user.name}</span>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Rating</label>
+                    <div className="flex items-center gap-2 bg-muted rounded-full px-4 py-2 w-fit">
+                      {[1, 2, 3, 4, 5].map((n) => (
+                        <button
+                          key={n}
+                          type="button"
+                          onClick={() => setReviewRating(n)}
+                          className="focus:outline-none"
+                          aria-label={`Rate ${n} stars`}
+                        >
+                          <Star className={cn("w-6 h-6 transition-colors", n <= reviewRating ? "fill-primary text-primary" : "text-muted")} />
+                        </button>
+                      ))}
                     </div>
                   </div>
                   <div>
@@ -444,11 +437,11 @@ export default function ProductDetails() {
                   {reviewSuccess && <p className="text-sm text-green-600">Thank you! Your review has been posted.</p>}
                   <motion.button
                     whileTap={{ scale: 0.98 }}
-                    disabled={reviewSubmitting || !reviewName.trim()}
+                    disabled={reviewSubmitting}
                     type="submit"
                     className={cn(
                       "flex items-center gap-2 px-6 py-3 rounded-full font-bold transition-colors",
-                      reviewSubmitting || !reviewName.trim()
+                      reviewSubmitting
                         ? "bg-muted text-muted-foreground cursor-not-allowed"
                         : "bg-foreground text-background hover:bg-primary hover:text-black"
                     )}
@@ -457,6 +450,7 @@ export default function ProductDetails() {
                     {reviewSubmitting ? 'Submitting...' : 'Submit Review'}
                   </motion.button>
                 </form>
+                )}
               </div>
 
               {product.reviews.length > 0 ? (

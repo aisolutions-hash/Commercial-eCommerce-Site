@@ -2,6 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
+from app.dependencies import get_current_user
+from app.models.user import User
 from app.schemas.product import ProductDetail, ProductList, ProductRead
 from app.schemas.review import ReviewCreate, ReviewRead
 from app.services.product import get_product_by_id, get_products
@@ -35,9 +37,11 @@ async def add_review(
     product_id: str,
     data: ReviewCreate,
     db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     product = await get_product_by_id(db, product_id)
     if not product:
         raise HTTPException(status_code=404, detail="Product not found")
+    data.user_name = current_user.name
     review = await create_review(db, product_id, data)
     return review
