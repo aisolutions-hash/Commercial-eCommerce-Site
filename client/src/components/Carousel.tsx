@@ -26,7 +26,7 @@ const slides: Slide[] = [
     title: "Advertise With Us",
     subtitle: "Reach thousands of industrial packaging buyers every day. Blend seamlessly into our marketplace.",
     image: "https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg",
-    link: "#",
+    link: "/contact",
     buttonText: "Learn More"
   },
   {
@@ -34,7 +34,7 @@ const slides: Slide[] = [
     title: "Tanvi Enterprises",
     subtitle: "Your trusted partner for quality products and services.",
     image: "/tanvi%20enterprises.jpeg",
-    link: "#",
+    link: "/contact",
     buttonText: "Learn More"
   },
   {
@@ -42,7 +42,7 @@ const slides: Slide[] = [
     title: "Shree Krishna Enterprises",
     subtitle: "Delivering excellence and quality you can depend on.",
     image: "/shree%20krishna%20enterprises.jpeg",
-    link: "#",
+    link: "/contact",
     buttonText: "Learn More"
   }
 ];

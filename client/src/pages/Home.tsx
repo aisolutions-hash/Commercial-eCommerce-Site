@@ -169,7 +169,7 @@ export default function Home() {
                     <div className="font-bold text-xl">Partnership</div>
                   </div>
                   <Link 
-                    to="#"
+                    to="/contact"
                     className="flex items-center justify-center px-4 py-2 text-sm font-bold rounded-full transition-colors bg-foreground text-background hover:bg-primary hover:text-black"
                   >
                     Learn More
