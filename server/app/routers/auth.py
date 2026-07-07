@@ -19,9 +19,14 @@ GOOGLE_USERINFO_URL = "https://www.googleapis.com/oauth2/v2/userinfo"
 GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/auth"
 
 
+def _redirect_uri(request: Request) -> str:
+    scheme = request.headers.get("x-forwarded-proto", request.url.scheme)
+    return f"{scheme}://{request.url.hostname}/api/auth/google/callback"
+
+
 @router.get("/google/login")
 async def google_login(request: Request):
-    redirect_uri = str(request.base_url) + "api/auth/google/callback"
+    redirect_uri = _redirect_uri(request)
     params = urlencode({
         "client_id": settings.google_client_id,
         "redirect_uri": redirect_uri,
@@ -38,7 +43,7 @@ async def google_callback(request: Request, db: AsyncSession = Depends(get_db)):
     if not code:
         raise HTTPException(status_code=400, detail="Missing authorization code")
 
-    redirect_uri = str(request.base_url) + "api/auth/google/callback"
+    redirect_uri = _redirect_uri(request)
 
     async with httpx.AsyncClient() as client:
         token_resp = await client.post(GOOGLE_TOKEN_URL, data={
