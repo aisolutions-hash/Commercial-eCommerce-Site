@@ -19,7 +19,12 @@ export default function Footer() {
             <h4 className="font-bold text-lg mb-4 text-white">Categories</h4>
             <ul className="space-y-2 text-sm text-gray-400">
               <li><Link to="/categories?id=industrial-packaging" className="hover:text-primary transition-colors">Industrial Packaging</Link></li>
-
+              <li><Link to="/categories?id=sales-growth-automation" className="hover:text-primary transition-colors">Sales & Growth Automation</Link></li>
+              <li><Link to="/categories?id=procurement-supply-chain-ai" className="hover:text-primary transition-colors">Procurement & Supply Chain AI</Link></li>
+              <li><Link to="/categories?id=content-creative-ai" className="hover:text-primary transition-colors">Content & Creative AI</Link></li>
+              <li><Link to="/categories?id=customer-experience-support" className="hover:text-primary transition-colors">Customer Experience & Support</Link></li>
+              <li><Link to="/categories?id=knowledge-enterprise-ai" className="hover:text-primary transition-colors">Knowledge & Enterprise AI</Link></li>
+              <li><Link to="/categories?id=custom-ai-development" className="hover:text-primary transition-colors">Custom AI Development</Link></li>
             </ul>
           </div>
           
