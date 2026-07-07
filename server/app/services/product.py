@@ -9,7 +9,9 @@ from app.models.review import Review
 async def get_categories(db: AsyncSession) -> list:
     from app.models.category import Category
     result = await db.execute(select(Category).order_by(Category.name))
-    return list(result.scalars().all())
+    cats = list(result.scalars().all())
+    cats.sort(key=lambda c: c.name != "Industrial Packaging")
+    return cats
 
 
 async def get_products(

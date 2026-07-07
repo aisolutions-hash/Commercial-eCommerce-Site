@@ -93,7 +93,7 @@ export default function Home() {
                     View All <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                   {products.map((product, idx) => (
                     <motion.div
                       key={product.id}
@@ -124,7 +124,7 @@ export default function Home() {
             <h2 className="text-3xl font-serif font-bold tracking-tight">Featured Products</h2>
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {featured.map((product, idx) => (
               <motion.div
                 key={product.id}
