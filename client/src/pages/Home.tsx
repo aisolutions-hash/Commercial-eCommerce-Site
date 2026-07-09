@@ -78,7 +78,11 @@ export default function Home() {
           </div>
 
           {categories.filter(c => (productsByCategory[c.id]?.length || 0) > 0).map((cat, ci) => {
-            const products = (productsByCategory[cat.id] || []).slice(0, 3);
+            const products = cat.id === 'industrial-packaging'
+              ? ['p-vci-polybag', 'p-stretch-film', 'p-hdpe-covers']
+                  .map(id => (productsByCategory[cat.id] || []).find(p => p.id === id))
+                  .filter(Boolean)
+              : (productsByCategory[cat.id] || []).slice(0, 3);
             return (
               <div key={cat.id} className="py-10 even:bg-muted/30 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8">
                 <div className="flex items-end justify-between mb-6">
