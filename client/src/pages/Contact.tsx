@@ -69,7 +69,7 @@ export default function Contact() {
               </div>
               <div>
                 <h3 className="font-semibold text-lg mb-1">Office</h3>
-                <p className="text-muted-foreground">4PV3+XR4, MIDC Nagapur<br/>Ahilyanagar, Maharashtra 414111<br/>India</p>
+                <p className="text-muted-foreground">PLOT NO IT-6, Kalisoft AI<br/>BEHIND IT PARK, MIDC<br/>Ahilyanagar, Maharashtra 414111<br/>India</p>
               </div>
             </div>
           </div>
