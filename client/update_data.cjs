@@ -258,29 +258,6 @@ Used for drainage networks in residential, commercial, and industrial areas.
 * **Check Width & Length**: Standard roll sizes for packaging.
 * **Note Adhesive Type**: Acrylic offers good clarity and aging; rubber offers strong initial tack.
 * **Check Colors**: Clear for invisible looks, brown for traditional looks, colored for branding/coding.`,
-
-  'p-masking-tape': `**Masking tape specs** cover backing (crepe paper), adhesive (rubber), width/length (various), color (beige, white, tan), thickness (e.g., 0.17mm), temperature resistance (e.g., 140°C), and performance (easy tear, holds tight, resists bleed-through) for general/high-temp painting/sealing. Key attributes define its use for clean paint lines and temporary adhesion, with variations for high-heat or specific tasks.
-
-**Typical Specifications**
-* **Backing Material**: Crepe Paper (for conformability)
-* **Adhesive**: Rubber-based (natural or synthetic), solvent-free options available
-* **Color**: Beige, Tan, Cream, Milky White, Brown
-* **Width**: Varies widely (e.g., 12mm, 24mm, 48mm, 96mm)
-* **Length**: Standard rolls (e.g., 45m, 50m)
-* **Thickness**: Around 0.17mm (for general purpose)
-* **Temperature Resistance**: Varies, e.g., up to 140°C (30 mins) for high-heat, or up to 121°C (250°F) for industrial
-* **Performance**: Easy to tear, resists curling/lifting, good paint hold-out (prevents bleed-through).
-
-**Key Features & Uses**
-* **General Purpose**: For clean paint lines, bundling, sealing, and general tasks.
-* **High-Performance**: For medium-to-high heat applications like automotive painting.
-* **Clean Removal**: Designed to remove easily without residue (for typical conditions).
-* **Conformability**: Crepe paper backing allows it to stick well around curves and corners.
-
-**Storage & Handling**
-* Store in dry conditions, away from direct sunlight, between 15°C-25°C (59°F-77°F) with <50% humidity.
-* Use within 12 months of shipment for best results.`,
-
   'p-pvc-tape': `**PVC Floor Marking Tape specs** include PVC material, rubber-based adhesive, single-sided application, various widths (1"-6"+) & lengths (10m, 20m, 30m, 25yd), common colors (yellow, black, red, blue, green, white), and properties like water/solvent resistance, durability, and conformability for marking aisles, hazards, and zones in industrial settings, often with good abrasion resistance for traffic.
 
 **Key Specifications**

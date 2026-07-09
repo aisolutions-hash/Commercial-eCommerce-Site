@@ -208,18 +208,6 @@ export const products: Product[] = [
     reviews: []
   },
   {
-    id: 'p-masking-tape',
-    name: 'General Purpose Masking Tape',
-    description: 'Crepe paper backing with rubber adhesive for clean paint lines, sealing, and temporary adhesion.',
-    longDescription: "**Masking tape specs** cover backing (crepe paper), adhesive (rubber), width/length (various), color (beige, white, tan), thickness (e.g., 0.17mm), temperature resistance (e.g., 140°C), and performance (easy tear, holds tight, resists bleed-through) for general/high-temp painting/sealing. Key attributes define its use for clean paint lines and temporary adhesion, with variations for high-heat or specific tasks.\n\n**Typical Specifications**\n* **Backing Material**: Crepe Paper (for conformability)\n* **Adhesive**: Rubber-based (natural or synthetic), solvent-free options available\n* **Color**: Beige, Tan, Cream, Milky White, Brown\n* **Width**: Varies widely (e.g., 12mm, 24mm, 48mm, 96mm)\n* **Length**: Standard rolls (e.g., 45m, 50m)\n* **Thickness**: Around 0.17mm (for general purpose)\n* **Temperature Resistance**: Varies, e.g., up to 140°C (30 mins) for high-heat, or up to 121°C (250°F) for industrial\n* **Performance**: Easy to tear, resists curling/lifting, good paint hold-out (prevents bleed-through).\n\n**Key Features & Uses**\n* **General Purpose**: For clean paint lines, bundling, sealing, and general tasks.\n* **High-Performance**: For medium-to-high heat applications like automotive painting.\n* **Clean Removal**: Designed to remove easily without residue (for typical conditions).\n* **Conformability**: Crepe paper backing allows it to stick well around curves and corners.\n\n**Storage & Handling**\n* Store in dry conditions, away from direct sunlight, between 15°C-25°C (59°F-77°F) with <50% humidity.\n* Use within 12 months of shipment for best results.",
-    price: 8.50,
-    categoryId: 'industrial-packaging',
-    images: ['/images/img25.jpeg'],
-    rating: 4.2,
-    features: ['0.17mm standard thickness', 'Resists up to 140°C', 'Easy clean removal', 'Good paint hold-out'],
-    reviews: []
-  },
-  {
     id: 'p-pvc-tape',
     name: 'PVC Floor Marking Tape',
     description: 'Plasticized PVC film with high-tack rubber adhesive for marking aisles, hazards, and zones.',
