@@ -2,22 +2,34 @@ const API_BASE = import.meta.env.VITE_API_BASE_URL || '/api';
 
 let getToken: () => string | null = () => null;
 
-/**
- * Set the token getter function (called by the Zustand store on initialization)
- * This allows the API client to always get the latest token from the store
- */
+const cache = new Map<string, { data: unknown; expiry: number }>();
+const CACHE_TTL = 60_000;
+
+export function clearCache() {
+  cache.clear();
+}
+
 export function setTokenGetter(fn: () => string | null) {
   getToken = fn;
 }
 
 async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
+  const isGet = !options.method || options.method === 'GET';
+  const cacheKey = `${options.method || 'GET'} ${path}`;
+
+  if (isGet) {
+    const cached = cache.get(cacheKey);
+    if (cached && cached.expiry > Date.now()) {
+      return cached.data as T;
+    }
+  }
+
   const token = getToken();
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
     ...(options.headers as Record<string, string>),
   };
 
-  // Add authorization header if token is available
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
   }
@@ -34,6 +46,10 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   if (!res.ok) {
     const message = data.detail || `Request failed: ${res.status}`;
     throw new Error(message);
+  }
+
+  if (isGet) {
+    cache.set(cacheKey, { data, expiry: Date.now() + CACHE_TTL });
   }
 
   return data;

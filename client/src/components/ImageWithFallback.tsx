@@ -37,6 +37,7 @@ export default function ImageWithFallback({
         <img
           src={src}
           alt={alt}
+          loading="lazy"
           className={cn("transition-opacity duration-500", isLoading ? "opacity-0" : "opacity-100", className)}
           onLoad={() => setIsLoading(false)}
           onError={() => {
