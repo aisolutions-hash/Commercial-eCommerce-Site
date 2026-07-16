@@ -85,8 +85,8 @@ async def google_callback(request: Request, db: AsyncSession = Depends(get_db)):
         await db.commit()
         await db.refresh(user)
 
-    jwt = create_access_token(user.id)
-    params = urlencode({"token": jwt, "name": user.name, "email": user.email})
+    jwt = create_access_token(user.id, user.role)
+    params = urlencode({"token": jwt, "name": user.name, "email": user.email, "role": user.role})
     return RedirectResponse(f"{settings.app_url}/oauth/callback?{params}")
 
 
@@ -105,8 +105,8 @@ async def register(body: UserRegister, db: AsyncSession = Depends(get_db)):
     await db.commit()
     await db.refresh(user)
 
-    token = create_access_token(user.id)
-    return TokenResponse(access_token=token)
+    token = create_access_token(user.id, user.role)
+    return TokenResponse(access_token=token, role=user.role)
 
 
 @router.post("/login", response_model=TokenResponse)
@@ -117,5 +117,5 @@ async def login(body: UserLogin, db: AsyncSession = Depends(get_db)):
     if not user or not verify_password(body.password, user.password_hash):
         raise HTTPException(status_code=401, detail="Invalid email or password")
 
-    token = create_access_token(user.id)
-    return TokenResponse(access_token=token)
+    token = create_access_token(user.id, user.role)
+    return TokenResponse(access_token=token, role=user.role)

@@ -55,7 +55,9 @@ export default function Navbar() {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-6">
             <Link to="/categories" className="text-sm font-medium hover:text-primary transition-colors">Categories</Link>
-            
+            {user?.role === 'admin' && (
+              <Link to="/admin" className="text-sm font-medium hover:text-primary transition-colors">Dashboard</Link>
+            )}
             <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-muted transition-colors">
               {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
             </button>
@@ -154,6 +156,9 @@ export default function Navbar() {
                 </form>
             </div>
             <Link to="/categories" className="block px-3 py-2 rounded-md text-base font-medium hover:bg-muted" onClick={() => setIsOpen(false)}>Categories</Link>
+            {user?.role === 'admin' && (
+              <Link to="/admin" className="block px-3 py-2 rounded-md text-base font-medium hover:bg-muted" onClick={() => setIsOpen(false)}>Dashboard</Link>
+            )}
             <Link to="/wishlist" className="block px-3 py-2 rounded-md text-base font-medium hover:bg-muted" onClick={() => setIsOpen(false)}>Wishlist</Link>
             
             {token ? (

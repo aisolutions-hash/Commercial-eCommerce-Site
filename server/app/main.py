@@ -19,7 +19,7 @@ from starlette.responses import Response
 from app.config import settings
 from app.database import Base, engine
 from app.logging_config import setup_logging
-from app.routers import auth, categories, contact, orders, products, users, wishlist
+from app.routers import admin, auth, categories, contact, orders, products, users, wishlist
 
 setup_logging()
 logger = logging.getLogger(__name__)
@@ -67,7 +67,7 @@ async def lifespan(app: FastAPI):
     try:
         async with engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
-            for col in ["google_id"]:
+            for col in ["google_id", "role"]:
                 try:
                     await conn.execute(text(f"ALTER TABLE users ADD COLUMN IF NOT EXISTS {col} VARCHAR(255)"))
                 except Exception:
@@ -98,6 +98,7 @@ app.add_middleware(SecurityHeadersMiddleware)
 app.add_middleware(RequestLoggingMiddleware)
 app.add_middleware(SlowAPIASGIMiddleware)
 
+app.include_router(admin.router)
 app.include_router(categories.router)
 app.include_router(products.router)
 app.include_router(auth.router)

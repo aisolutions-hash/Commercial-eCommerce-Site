@@ -20,6 +20,8 @@ const Terms = lazy(() => import('./pages/Terms'));
 const Auth = lazy(() => import('./pages/Auth'));
 const OAuthCallback = lazy(() => import('./pages/OAuthCallback'));
 const Profile = lazy(() => import('./pages/Profile'));
+const AdminLayout = lazy(() => import('./components/AdminLayout'));
+const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
 
 function PageLoader() {
   return (
@@ -79,6 +81,13 @@ export default function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/terms" element={<Terms />} />
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<AdminDashboard />} />
+            <Route path="products" element={<AdminDashboard />} />
+            <Route path="categories" element={<AdminDashboard />} />
+            <Route path="orders" element={<AdminDashboard />} />
+            <Route path="inquiries" element={<AdminDashboard />} />
+          </Route>
         </Routes>
       </Suspense>
     </BrowserRouter>

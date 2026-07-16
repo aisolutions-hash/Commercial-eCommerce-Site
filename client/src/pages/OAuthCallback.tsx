@@ -12,6 +12,7 @@ export default function OAuthCallback() {
     const token = params.get('token');
     const name = params.get('name');
     const email = params.get('email');
+    const role = params.get('role') || 'customer';
     const error = params.get('error');
     const redirect = params.get('redirect') || '/';
 
@@ -21,7 +22,7 @@ export default function OAuthCallback() {
     }
 
     if (token && name && email) {
-      setAuth(token, { name, email });
+      setAuth(token, { name, email, role });
       navigate(redirect, { replace: true });
     } else {
       navigate('/auth', { replace: true });

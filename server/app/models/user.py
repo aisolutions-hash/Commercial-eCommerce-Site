@@ -15,6 +15,7 @@ class User(Base):
     password_hash: Mapped[str] = mapped_column(String(255), nullable=False)
     google_id: Mapped[str | None] = mapped_column(String(255), nullable=True, default=None)
     name: Mapped[str] = mapped_column(String(255), nullable=False)
+    role: Mapped[str] = mapped_column(String(50), default="customer")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
 
     orders: Mapped[list["Order"]] = relationship("Order", back_populates="user")

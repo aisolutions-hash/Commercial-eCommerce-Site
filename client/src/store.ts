@@ -6,6 +6,7 @@ import { setTokenGetter, getProfile, addToWishlist as apiAddToWishlist, removeFr
 interface User {
   name: string;
   email: string;
+  role: string;
 }
 
 interface AppState {
@@ -44,13 +45,14 @@ export const useStore = create<AppState>()(
         isTokenValid: () => !!get().token,
 
         setAuth: (token, user) => {
+          localStorage.setItem('kalisoft-role', user.role);
           set({ token, user });
           get().syncWishlistFromBackend();
         },
 
         logout: () => {
+          localStorage.removeItem('kalisoft-role');
           set({ token: null, user: null });
-          // localStorage is automatically cleared by persist middleware
         },
 
         restoreSession: async () => {
@@ -64,7 +66,7 @@ export const useStore = create<AppState>()(
             const profile = await getProfile();
             if (get().token !== tokenAtStart) return;
             set({
-              user: { name: profile.name, email: profile.email },
+              user: { name: profile.name, email: profile.email, role: profile.role },
             });
             await get().syncWishlistFromBackend();
             console.log('[Auth] Session restored successfully for:', profile.email);
