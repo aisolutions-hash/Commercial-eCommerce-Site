@@ -21,7 +21,11 @@ GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/auth"
 
 def _redirect_uri(request: Request) -> str:
     scheme = request.headers.get("x-forwarded-proto", request.url.scheme)
-    return f"{scheme}://{request.url.hostname}/api/auth/google/callback"
+    host = request.url.hostname
+    port = request.url.port
+    if port and port not in (80, 443):
+        host = f"{host}:{port}"
+    return f"{scheme}://{host}/api/auth/google/callback"
 
 
 @router.get("/google/login")
