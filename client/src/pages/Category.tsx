@@ -189,14 +189,9 @@ export default function CategoryPage() {
 
           <div className="flex-1">
             <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredProducts.slice(0, 24).map((product) => (
+              {filteredProducts.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
-              {filteredProducts.length > 24 && (
-                <div className="col-span-full text-center py-8 text-muted-foreground">
-                  +{filteredProducts.length - 24} more products. Refine filters to see all.
-                </div>
-              )}
             </div>
             {filteredProducts.length === 0 && (
               <div className="text-center py-20">

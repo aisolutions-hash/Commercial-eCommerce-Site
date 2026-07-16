@@ -18,6 +18,7 @@ const Contact = lazy(() => import('./pages/Contact'));
 const Privacy = lazy(() => import('./pages/Privacy'));
 const Terms = lazy(() => import('./pages/Terms'));
 const Auth = lazy(() => import('./pages/Auth'));
+const OAuthCallback = lazy(() => import('./pages/OAuthCallback'));
 const Profile = lazy(() => import('./pages/Profile'));
 
 function PageLoader() {
@@ -68,6 +69,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/auth" element={<Auth />} />
+          <Route path="/oauth/callback" element={<OAuthCallback />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/categories" element={<Category />} />
           <Route path="/product/:id" element={<Product />} />

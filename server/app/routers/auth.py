@@ -70,7 +70,7 @@ async def google_callback(request: Request, db: AsyncSession = Depends(get_db)):
 
     if not email:
         params = urlencode({"error": "google_email_missing"})
-        return RedirectResponse(f"{settings.app_url}/auth?{params}")
+        return RedirectResponse(f"{settings.app_url}/oauth/callback?{params}")
 
     result = await db.execute(select(User).where(User.email == email))
     user = result.scalar_one_or_none()
@@ -87,7 +87,7 @@ async def google_callback(request: Request, db: AsyncSession = Depends(get_db)):
 
     jwt = create_access_token(user.id)
     params = urlencode({"token": jwt, "name": user.name, "email": user.email})
-    return RedirectResponse(f"{settings.app_url}/auth?{params}")
+    return RedirectResponse(f"{settings.app_url}/oauth/callback?{params}")
 
 
 @router.post("/register", response_model=TokenResponse, status_code=status.HTTP_201_CREATED)

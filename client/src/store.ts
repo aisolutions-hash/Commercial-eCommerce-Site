@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { Product, CartItem } from './types';
-import { setTokenGetter, getProfile } from './lib/api';
+import { setTokenGetter, getProfile, addToWishlist as apiAddToWishlist, removeFromWishlist as apiRemoveFromWishlist, getWishlist } from './lib/api';
 
 interface User {
   name: string;
@@ -19,7 +19,8 @@ interface AppState {
   removeFromCart: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
   clearCart: () => void;
-  toggleWishlist: (productId: string) => void;
+  toggleWishlist: (productId: string) => Promise<void>;
+  syncWishlistFromBackend: () => Promise<void>;
   toggleTheme: () => void;
   setAuth: (token: string, user: User) => void;
   logout: () => void;
@@ -44,7 +45,7 @@ export const useStore = create<AppState>()(
 
         setAuth: (token, user) => {
           set({ token, user });
-          // Token is automatically persisted to localStorage by persist middleware
+          get().syncWishlistFromBackend();
         },
 
         logout: () => {
@@ -65,6 +66,7 @@ export const useStore = create<AppState>()(
             set({
               user: { name: profile.name, email: profile.email },
             });
+            await get().syncWishlistFromBackend();
             console.log('[Auth] Session restored successfully for:', profile.email);
           } catch (err) {
             console.error('[Auth] Session restoration failed:', err);
@@ -101,12 +103,42 @@ export const useStore = create<AppState>()(
 
         clearCart: () => set({ cart: [] }),
 
-        toggleWishlist: (productId) =>
-          set((state) => ({
-            wishlist: state.wishlist.includes(productId)
-              ? state.wishlist.filter((id) => id !== productId)
-              : [...state.wishlist, productId],
-          })),
+        toggleWishlist: async (productId) => {
+          const { wishlist, token } = get();
+          const wasIn = wishlist.includes(productId);
+          const prev = wishlist;
+
+          set({
+            wishlist: wasIn
+              ? wishlist.filter((id) => id !== productId)
+              : [...wishlist, productId],
+          });
+
+          if (!token) return;
+
+          try {
+            if (wasIn) {
+              await apiRemoveFromWishlist(productId);
+            } else {
+              await apiAddToWishlist(productId);
+            }
+          } catch {
+            set({ wishlist: prev });
+          }
+        },
+
+        syncWishlistFromBackend: async () => {
+          if (!get().token) return;
+          try {
+            const items = await getWishlist();
+            const backendIds = new Set(items.map((i) => i.product_id));
+            const localIds = new Set(get().wishlist);
+            const merged = [...new Set([...backendIds, ...localIds])];
+            set({ wishlist: merged });
+          } catch {
+            /* silent — keep local copy */
+          }
+        },
 
         toggleTheme: () =>
           set((state) => {
