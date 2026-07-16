@@ -124,7 +124,7 @@ function ManageProducts() {
     getProducts({ per_page: 100 }).then(r => setProducts(r.items)).finally(() => setLoading(false));
   };
 
-  useEffect(load, []);
+  useEffect(() => { load(); }, []);
 
   const remove = async (id: string) => {
     if (!confirm('Delete this product?')) return;
@@ -185,7 +185,7 @@ function ManageCategories() {
   const [loading, setLoading] = useState(true);
 
   const load = () => getCategories().then(setCategories).finally(() => setLoading(false));
-  useEffect(load, []);
+  useEffect(() => { load(); }, []);
 
   const remove = async (id: string) => {
     if (!confirm('Delete this category?')) return;
@@ -242,7 +242,7 @@ function ManageOrders() {
   const [loading, setLoading] = useState(true);
 
   const load = () => api<OrderItem[]>('/admin/orders').then(setOrders).finally(() => setLoading(false));
-  useEffect(load, []);
+  useEffect(() => { load(); }, []);
 
   const updateStatus = async (id: string, status: string) => {
     await api(`/admin/orders/${id}/status?status=${encodeURIComponent(status)}`, { method: 'PUT' });
@@ -303,7 +303,7 @@ function ManageInquiries() {
   const [loading, setLoading] = useState(true);
 
   const load = () => api<Inquiry[]>('/admin/inquiries').then(setInquiries).finally(() => setLoading(false));
-  useEffect(load, []);
+  useEffect(() => { load(); }, []);
 
   const remove = async (id: string) => {
     if (!confirm('Delete this inquiry?')) return;
