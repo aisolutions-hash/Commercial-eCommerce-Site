@@ -23,7 +23,7 @@ interface Inquiry {
 }
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || '/api';
-const token = () => localStorage.getItem('kalisoft-storage') ? JSON.parse(localStorage.getItem('kalisoft-storage')!).token : null;
+const token = () => { try { const s = JSON.parse(localStorage.getItem('kalisoft-storage')!); return s?.state?.token || null; } catch { return null; } };
 
 async function api<T>(path: string, opts?: RequestInit): Promise<T> {
   const t = token();
