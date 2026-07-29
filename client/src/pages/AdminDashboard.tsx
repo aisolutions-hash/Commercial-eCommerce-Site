@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
-import { Package, Tags, ShoppingCart, MessageSquare, ArrowRight, Trash2 } from 'lucide-react';
+import { Package, Tags, ShoppingCart, MessageSquare, Users, ArrowRight, Trash2 } from 'lucide-react';
 import { getProducts, getCategories, Category, ProductRead } from '../lib/api';
 
 interface OrderItem {
@@ -19,6 +19,16 @@ interface Inquiry {
   name: string;
   email: string;
   message: string;
+  created_at: string;
+}
+
+interface UserAdmin {
+  id: string;
+  email: string;
+  name: string;
+  role: string;
+  auth_method: string;
+  order_count: number;
   created_at: string;
 }
 
@@ -67,11 +77,12 @@ export default function AdminDashboard() {
   if (tab === 'categories') return <ManageCategories />;
   if (tab === 'orders') return <ManageOrders />;
   if (tab === 'inquiries') return <ManageInquiries />;
+  if (tab === 'users') return <ManageUsers />;
   return <Overview />;
 }
 
 function Overview() {
-  const [stats, setStats] = useState({ products: 0, categories: 0, orders: 0, inquiries: 0 });
+  const [stats, setStats] = useState({ products: 0, categories: 0, orders: 0, inquiries: 0, users: 0 });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -80,6 +91,7 @@ function Overview() {
       getCategories().then(r => setStats(s => ({ ...s, categories: r.length }))).catch(() => {}),
       api<OrderItem[]>('/admin/orders').then(r => setStats(s => ({ ...s, orders: r.length }))).catch(() => {}),
       api<Inquiry[]>('/admin/inquiries').then(r => setStats(s => ({ ...s, inquiries: r.length }))).catch(() => {}),
+      api<UserAdmin[]>('/admin/users').then(r => setStats(s => ({ ...s, users: r.length }))).catch(() => {}),
     ]).finally(() => setLoading(false));
   }, []);
 
@@ -88,6 +100,7 @@ function Overview() {
     { label: 'Categories', value: stats.categories, icon: Tags, href: '/admin/categories', color: 'bg-green-500' },
     { label: 'Orders', value: stats.orders, icon: ShoppingCart, href: '/admin/orders', color: 'bg-purple-500' },
     { label: 'Inquiries', value: stats.inquiries, icon: MessageSquare, href: '/admin/inquiries', color: 'bg-orange-500' },
+    { label: 'Users', value: stats.users || 0, icon: Users, href: '/admin/users', color: 'bg-teal-500' },
   ];
 
   if (loading) return <Spinner />;
@@ -342,6 +355,63 @@ function ManageInquiries() {
               <p className="text-sm text-muted-foreground whitespace-pre-wrap bg-muted/30 rounded-2xl p-4">{q.message}</p>
             </div>
           ))}
+        </div>
+      )}
+    </motion.div>
+  );
+}
+
+function ManageUsers() {
+  const [users, setUsers] = useState<UserAdmin[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const load = () => api<UserAdmin[]>('/admin/users').then(setUsers).finally(() => setLoading(false));
+  useEffect(() => { load(); }, []);
+
+  return (
+    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+      <div className="flex items-center justify-between mb-8">
+        <h1 className="text-3xl font-serif font-bold tracking-tight">Users</h1>
+        <span className="text-sm text-muted-foreground">{users.length} total</span>
+      </div>
+
+      {loading ? <Spinner /> : users.length === 0 ? (
+        <div className="bg-card border border-border rounded-3xl p-8 text-center text-muted-foreground shadow-sm">
+          <Users className="w-12 h-12 mx-auto mb-4 opacity-50" />
+          <p className="font-medium text-lg text-foreground">No users registered yet.</p>
+        </div>
+      ) : (
+        <div className="bg-card border border-border rounded-3xl overflow-hidden shadow-sm">
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-border bg-muted/50">
+                  <th className="text-left p-4 font-medium">Name</th>
+                  <th className="text-left p-4 font-medium">Email</th>
+                  <th className="text-left p-4 font-medium hidden sm:table-cell">Auth</th>
+                  <th className="text-left p-4 font-medium hidden md:table-cell">Role</th>
+                  <th className="text-left p-4 font-medium hidden md:table-cell">Orders</th>
+                  <th className="text-left p-4 font-medium hidden lg:table-cell">Joined</th>
+                </tr>
+              </thead>
+              <tbody>
+                {users.map((u, i) => (
+                  <tr key={u.id} className={`border-b border-border last:border-0 hover:bg-muted/30 transition-colors ${i % 2 === 0 ? 'bg-background/50' : ''}`}>
+                    <td className="p-4 font-medium">{u.name}</td>
+                    <td className="p-4 text-muted-foreground">{u.email}</td>
+                    <td className="p-4 hidden sm:table-cell">
+                      <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${u.auth_method === 'google' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300' : 'bg-muted text-muted-foreground'}`}>
+                        {u.auth_method === 'google' ? 'Google' : 'Email'}
+                      </span>
+                    </td>
+                    <td className="p-4 hidden md:table-cell capitalize">{u.role}</td>
+                    <td className="p-4 hidden md:table-cell">{u.order_count}</td>
+                    <td className="p-4 hidden lg:table-cell text-muted-foreground">{new Date(u.created_at).toLocaleDateString()}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </motion.div>

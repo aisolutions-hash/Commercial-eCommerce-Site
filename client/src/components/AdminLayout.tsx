@@ -1,5 +1,5 @@
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Package, Tags, ShoppingCart, MessageSquare, ExternalLink, LogOut } from 'lucide-react';
+import { LayoutDashboard, Package, Tags, ShoppingCart, MessageSquare, Users, ExternalLink, LogOut } from 'lucide-react';
 import { useStore } from '../store';
 
 const navItems = [
@@ -8,6 +8,7 @@ const navItems = [
   { to: '/admin/categories', icon: Tags, label: 'Categories' },
   { to: '/admin/orders', icon: ShoppingCart, label: 'Orders' },
   { to: '/admin/inquiries', icon: MessageSquare, label: 'Inquiries' },
+  { to: '/admin/users', icon: Users, label: 'Users' },
 ];
 
 export default function AdminLayout() {

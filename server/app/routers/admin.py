@@ -3,6 +3,8 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from pydantic import BaseModel
+
 from app.database import get_db
 from app.dependencies import require_admin
 from app.models.category import Category
@@ -13,6 +15,19 @@ from app.models.user import User
 from app.schemas.category import CategoryRead
 from app.schemas.order import OrderRead
 from app.schemas.product import ProductListItem, ProductList, ProductRead
+
+
+class UserAdminRead(BaseModel):
+    id: str
+    email: str
+    name: str
+    role: str = "customer"
+    auth_method: str = "email"
+    order_count: int = 0
+    created_at: str
+
+    class Config:
+        from_attributes = True
 
 router = APIRouter(prefix="/api/admin", tags=["admin"])
 
@@ -177,6 +192,31 @@ async def update_order_status(
     order.status = status
     await db.commit()
     return {"status": "ok"}
+
+
+@router.get("/users", response_model=list[UserAdminRead])
+async def list_users(
+    db: AsyncSession = Depends(get_db),
+    _admin: User = Depends(require_admin),
+):
+    order_counts = select(Order.user_id, func.count(Order.id).label("cnt")).group_by(Order.user_id).subquery()
+    stmt = select(
+        User.id, User.email, User.name, User.role,
+        User.google_id, User.password_hash, User.created_at,
+        func.coalesce(order_counts.c.cnt, 0).label("order_count"),
+    ).outerjoin(order_counts, User.id == order_counts.c.user_id).order_by(User.created_at.desc())
+
+    result = await db.execute(stmt)
+    rows = result.all()
+    return [
+        UserAdminRead(
+            id=r.id, email=r.email, name=r.name, role=r.role or "customer",
+            auth_method="google" if r.google_id else "email",
+            order_count=r.order_count,
+            created_at=r.created_at.isoformat(),
+        )
+        for r in rows
+    ]
 
 
 @router.get("/inquiries")
