@@ -44,10 +44,8 @@ export default function Auth() {
         ? await apiLogin(email, password)
         : await apiRegister(name, email, password);
 
-      setAuth(res.access_token, { name: '', email });
-
       const profile = await getProfile();
-      setAuth(res.access_token, { name: profile.name, email: profile.email });
+      setAuth(res.access_token, { name: profile.name, email: profile.email, role: profile.role });
 
       const params = new URLSearchParams(location.search);
       const redirect = params.get('redirect') || '/';
