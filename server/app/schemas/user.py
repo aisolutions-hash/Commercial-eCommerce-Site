@@ -18,7 +18,7 @@ class UserRead(BaseModel):
     id: str
     email: str
     name: str
-    role: str = "customer"
+    role: str
     created_at: datetime
 
     class Config:
@@ -28,4 +28,4 @@ class UserRead(BaseModel):
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
-    role: str = "customer"
+    role: str

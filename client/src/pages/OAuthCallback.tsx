@@ -12,7 +12,7 @@ export default function OAuthCallback() {
     const token = params.get('token');
     const name = params.get('name');
     const email = params.get('email');
-    const role = params.get('role') || 'customer';
+    const role = params.get('role') || '';
     const error = params.get('error');
     const redirect = params.get('redirect') || '/';
 

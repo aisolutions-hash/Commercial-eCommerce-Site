@@ -21,7 +21,7 @@ class UserAdminRead(BaseModel):
     id: str
     email: str
     name: str
-    role: str = "customer"
+    role: str
     auth_method: str = "email"
     order_count: int = 0
     created_at: str
@@ -210,7 +210,7 @@ async def list_users(
     rows = result.all()
     return [
         UserAdminRead(
-            id=r.id, email=r.email, name=r.name, role=r.role or "customer",
+            id=r.id, email=r.email, name=r.name, role=r.role,
             auth_method="google" if r.google_id else "email",
             order_count=r.order_count,
             created_at=r.created_at.isoformat(),
