@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
-import { Package, Tags, ShoppingCart, MessageSquare, Users, ArrowRight, Trash2, Phone } from 'lucide-react';
+import { Package, Tags, ShoppingCart, MessageSquare, Users, ArrowRight, Trash2, Phone, Mail } from 'lucide-react';
 import { getProducts, getCategories, Category, ProductRead } from '../lib/api';
 
 interface OrderItem {
@@ -274,6 +274,11 @@ function ManageOrders() {
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-3xl font-serif font-bold tracking-tight">Orders</h1>
         <span className="text-sm text-muted-foreground">{orders.length} total</span>
+      </div>
+
+      <div className="flex items-center gap-2 bg-primary/10 text-black dark:text-primary text-sm font-medium rounded-2xl px-4 py-3 mb-6">
+        <Mail className="w-4 h-4 shrink-0" />
+        Changing a status sends an automatic email notification to the customer.
       </div>
 
       {loading ? <Spinner /> : orders.length === 0 ? (
