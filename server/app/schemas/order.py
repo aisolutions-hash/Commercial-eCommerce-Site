@@ -9,16 +9,16 @@ class OrderItemInput(BaseModel):
 
 
 class ShippingInput(BaseModel):
-    name: str = ""
-    phone: str = ""
-    address: str = ""
-    city: str = ""
-    zip: str = ""
+    name: str = Field(min_length=1)
+    phone: str = Field(min_length=7)
+    address: str = Field(min_length=1)
+    city: str = Field(min_length=1)
+    zip: str = Field(min_length=1)
 
 
 class OrderCreate(BaseModel):
     items: list[OrderItemInput]
-    shipping: ShippingInput = ShippingInput()
+    shipping: ShippingInput
 
 
 class OrderRead(BaseModel):
