@@ -10,7 +10,7 @@ import { placeOrder } from '../lib/api';
 
 export default function Checkout() {
   const { cart, updateQuantity, removeFromCart, clearCart, user, token } = useStore();
-  const [step, setStep] = useState<'cart' | 'shipping' | 'payment' | 'success'>('cart');
+  const [step, setStep] = useState<'cart' | 'shipping' | 'success'>('cart');
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [shipping, setShipping] = useState({ firstName: '', lastName: '', address: '', city: '', zip: '', phone: '' });
@@ -102,9 +102,7 @@ export default function Checkout() {
               <div className="flex items-center gap-4 text-sm font-medium mb-8">
                 <button onClick={() => setStep('cart')} className="text-muted-foreground hover:text-primary transition-colors">Cart</button>
                 <ArrowRight className="w-4 h-4 text-muted-foreground" />
-                <button onClick={() => setStep('shipping')} className={step === 'shipping' ? "text-foreground font-bold" : "text-muted-foreground"}>Shipping</button>
-                <ArrowRight className="w-4 h-4 text-muted-foreground" />
-                <span className={step === 'payment' ? "text-foreground font-bold" : "text-muted-foreground"}>Payment</span>
+                <span className={step === 'shipping' ? "text-foreground font-bold" : "text-muted-foreground"}>Shipping</span>
               </div>
             )}
 
@@ -151,7 +149,7 @@ export default function Checkout() {
             )}
 
             {step === 'shipping' && (
-              <motion.form initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6 bg-card border border-border p-6 md:p-8 rounded-[2rem] shadow-sm" onSubmit={(e) => { e.preventDefault(); setStep('payment'); }}>
+              <motion.form initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6 bg-card border border-border p-6 md:p-8 rounded-[2rem] shadow-sm" onSubmit={handleCompleteOrder}>
                 <h2 className="text-xl font-bold mb-4">Shipping Information</h2>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="col-span-2 md:col-span-1">
@@ -180,47 +178,8 @@ export default function Checkout() {
                   </div>
                 </div>
                 <div className="pt-4 flex justify-end">
-                  <button type="submit" className="bg-foreground text-background px-8 py-3 rounded-full font-bold hover:bg-primary-dark transition-colors">Continue to Payment</button>
-                </div>
-              </motion.form>
-            )}
-
-            {step === 'payment' && (
-              <motion.form initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6 bg-card border border-border p-6 md:p-8 rounded-[2rem] shadow-sm" onSubmit={handleCompleteOrder}>
-                <h2 className="text-xl font-bold mb-4">Payment Method</h2>
-                
-                <div className="space-y-4">
-                  <label className="flex items-center gap-4 p-4 border border-primary rounded-xl bg-primary/5 cursor-pointer">
-                    <input type="radio" name="payment" defaultChecked className="w-4 h-4 text-primary focus:ring-primary" />
-                    <span className="font-medium">Credit / Debit Card</span>
-                  </label>
-                  <label className="flex items-center gap-4 p-4 border border-border rounded-xl cursor-pointer hover:bg-muted transition-colors">
-                    <input type="radio" name="payment" className="w-4 h-4 text-primary focus:ring-primary" />
-                    <span className="font-medium">PayPal</span>
-                  </label>
-                </div>
-
-                <div className="space-y-4 pt-4">
-                  <div>
-                    <label className="block text-sm font-medium mb-2 text-muted-foreground">Card Number</label>
-                    <input required type="text" placeholder="0000 0000 0000 0000" className="w-full bg-background border border-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary" />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                     <div>
-                      <label className="block text-sm font-medium mb-2 text-muted-foreground">Expiry Date</label>
-                      <input required type="text" placeholder="MM/YY" className="w-full bg-background border border-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary" />
-                     </div>
-                     <div>
-                      <label className="block text-sm font-medium mb-2 text-muted-foreground">CVC</label>
-                      <input required type="text" placeholder="123" className="w-full bg-background border border-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary" />
-                     </div>
-                  </div>
-                </div>
-
-                <div className="pt-6 flex justify-between items-center">
-                  <button type="button" onClick={() => setStep('shipping')} className="text-muted-foreground hover:text-foreground font-medium">Back</button>
-                  <button type="submit" disabled={submitting} className="bg-primary text-black px-8 py-3 rounded-full font-bold hover:bg-primary-dark transition-colors flex items-center gap-2 disabled:opacity-50">
-                    <ShieldCheck className="w-5 h-5" /> {submitting ? 'Processing...' : `Pay Rs. ${total.toFixed(2)}`}
+                  <button type="submit" disabled={submitting} className="bg-foreground text-background px-8 py-3 rounded-full font-bold hover:bg-primary hover:text-black transition-colors flex items-center gap-2 disabled:opacity-50">
+                    <ShieldCheck className="w-5 h-5" /> {submitting ? 'Placing Order...' : 'Place Order'}
                   </button>
                 </div>
               </motion.form>
