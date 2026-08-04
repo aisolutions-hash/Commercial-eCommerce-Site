@@ -2,6 +2,7 @@ from uuid import uuid4
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 
 from pydantic import BaseModel
 
@@ -29,6 +30,20 @@ class UserAdminRead(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class OrderAdminRead(OrderRead):
+    user_name: str | None = None
+    user_email: str | None = None
+
+    @classmethod
+    def from_order(cls, order) -> "OrderAdminRead":
+        data = OrderRead.model_validate(order).model_dump()
+        user = order.user if hasattr(order, "user") else None
+        data["user_name"] = getattr(user, "name", None)
+        data["user_email"] = getattr(user, "email", None)
+        return cls(**data)
+
 
 router = APIRouter(prefix="/api/admin", tags=["admin"])
 
@@ -171,13 +186,14 @@ async def delete_category(
     await db.commit()
 
 
-@router.get("/orders", response_model=list[OrderRead])
+@router.get("/orders", response_model=list[OrderAdminRead])
 async def list_orders(
     db: AsyncSession = Depends(get_db),
     _admin: User = Depends(require_admin),
 ):
-    result = await db.execute(select(Order).order_by(Order.created_at.desc()))
-    return result.scalars().all()
+    stmt = select(Order).options(selectinload(Order.user)).order_by(Order.created_at.desc())
+    result = await db.execute(stmt)
+    return [OrderAdminRead.from_order(o) for o in result.scalars().all()]
 
 
 @router.put("/orders/{order_id}/status")

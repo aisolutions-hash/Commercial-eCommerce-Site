@@ -2,15 +2,22 @@ import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
-import { Package, Tags, ShoppingCart, MessageSquare, Users, ArrowRight, Trash2 } from 'lucide-react';
+import { Package, Tags, ShoppingCart, MessageSquare, Users, ArrowRight, Trash2, Phone } from 'lucide-react';
 import { getProducts, getCategories, Category, ProductRead } from '../lib/api';
 
 interface OrderItem {
   id: string;
   user_id: string;
-  items: { product_id: string; quantity: number; price: number }[];
+  items: { product_id: string; product_name?: string; quantity: number; price: number }[];
   total: number;
   status: string;
+  shipping_name?: string | null;
+  shipping_phone?: string | null;
+  shipping_address?: string | null;
+  shipping_city?: string | null;
+  shipping_zip?: string | null;
+  user_name?: string | null;
+  user_email?: string | null;
   created_at: string;
 }
 
@@ -277,15 +284,15 @@ function ManageOrders() {
       ) : (
         <div className="space-y-4">
           {orders.map(o => (
-            <div key={o.id} className="bg-card border border-border rounded-3xl p-6 shadow-sm">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div key={o.id} className="bg-card border border-border rounded-3xl shadow-sm overflow-hidden">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 border-b border-border">
                 <div>
                   <div className="flex items-center gap-3 mb-1">
                     <span className="font-bold text-lg">Order #{o.id.slice(0, 8)}</span>
                     <StatusBadge status={o.status} />
                   </div>
                   <p className="text-sm text-muted-foreground">
-                    {new Date(o.created_at).toLocaleDateString()} — {o.items.length} item(s)
+                    {new Date(o.created_at).toLocaleString()} — {o.items.length} item(s)
                   </p>
                 </div>
                 <div className="flex items-center gap-4">
@@ -301,6 +308,39 @@ function ManageOrders() {
                     <option value="delivered">Delivered</option>
                     <option value="cancelled">Cancelled</option>
                   </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
+                <div>
+                  <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-3">Customer</h4>
+                  <div className="space-y-1 text-sm">
+                    <p className="font-semibold">{o.user_name || o.shipping_name || '—'}</p>
+                    <p className="text-muted-foreground">{o.user_email || '—'}</p>
+                    <p className="text-muted-foreground flex items-center gap-2">
+                      <Phone className="w-3.5 h-3.5" /> {o.shipping_phone || '—'}
+                    </p>
+                  </div>
+
+                  <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wider mt-5 mb-3">Shipping Address</h4>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {[o.shipping_address, o.shipping_city, o.shipping_zip].filter(Boolean).join(', ') || '—'}
+                  </p>
+                </div>
+
+                <div>
+                  <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-3">Items</h4>
+                  <div className="space-y-2">
+                    {o.items.map((item, i) => (
+                      <div key={i} className="flex justify-between text-sm bg-muted/30 rounded-xl px-4 py-2">
+                        <span className="font-medium line-clamp-1">
+                          {item.product_name || item.product_id}
+                          <span className="text-muted-foreground font-normal"> × {item.quantity}</span>
+                        </span>
+                        <span className="font-semibold shrink-0 ml-3">Rs. {(item.price * item.quantity).toFixed(2)}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
