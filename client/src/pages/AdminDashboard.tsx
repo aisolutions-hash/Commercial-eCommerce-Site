@@ -260,13 +260,19 @@ function ManageCategories() {
 function ManageOrders() {
   const [orders, setOrders] = useState<OrderItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [updatingId, setUpdatingId] = useState<string | null>(null);
 
   const load = () => api<OrderItem[]>('/admin/orders').then(setOrders).finally(() => setLoading(false));
   useEffect(() => { load(); }, []);
 
   const updateStatus = async (id: string, status: string) => {
-    await api(`/admin/orders/${id}/status?status=${encodeURIComponent(status)}`, { method: 'PUT' });
-    load();
+    setUpdatingId(id);
+    try {
+      await api(`/admin/orders/${id}/status?status=${encodeURIComponent(status)}`, { method: 'PUT' });
+      await load();
+    } finally {
+      setUpdatingId(null);
+    }
   };
 
   return (
@@ -302,17 +308,24 @@ function ManageOrders() {
                 </div>
                 <div className="flex items-center gap-4">
                   <span className="font-bold text-xl">Rs. {Number(o.total).toFixed(2)}</span>
-                  <select
-                    value={o.status}
-                    onChange={e => updateStatus(o.id, e.target.value)}
-                    className="text-sm border border-border rounded-full px-4 py-2 bg-background cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary"
-                  >
-                    <option value="pending">Pending</option>
-                    <option value="confirmed">Confirmed</option>
-                    <option value="shipped">Shipped</option>
-                    <option value="delivered">Delivered</option>
-                    <option value="cancelled">Cancelled</option>
-                  </select>
+                  {updatingId === o.id ? (
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground border border-border rounded-full px-4 py-2">
+                      <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                      Updating...
+                    </div>
+                  ) : (
+                    <select
+                      value={o.status}
+                      onChange={e => updateStatus(o.id, e.target.value)}
+                      className="text-sm border border-border rounded-full px-4 py-2 bg-background cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary"
+                    >
+                      <option value="pending">Pending</option>
+                      <option value="confirmed">Confirmed</option>
+                      <option value="shipped">Shipped</option>
+                      <option value="delivered">Delivered</option>
+                      <option value="cancelled">Cancelled</option>
+                    </select>
+                  )}
                 </div>
               </div>
 
