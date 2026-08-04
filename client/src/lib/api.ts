@@ -107,9 +107,14 @@ export interface ProductList {
 export interface OrderRead {
   id: string;
   user_id: string;
-  items: { product_id: string; quantity: number; price: number }[];
+  items: { product_id: string; product_name?: string; quantity: number; price: number }[];
   total: number;
   status: string;
+  shipping_name?: string | null;
+  shipping_phone?: string | null;
+  shipping_address?: string | null;
+  shipping_city?: string | null;
+  shipping_zip?: string | null;
   created_at: string;
 }
 

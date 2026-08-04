@@ -109,20 +109,44 @@ export default function Profile() {
             ) : orders.length > 0 ? (
               <div className="space-y-4">
                 {orders.map((order) => (
-                  <div key={order.id} className="bg-card border border-border rounded-3xl p-6 shadow-sm">
-                    <div className="flex items-center justify-between mb-4">
+                  <div key={order.id} className="bg-card border border-border rounded-3xl overflow-hidden shadow-sm">
+                    <div className="flex items-center justify-between px-6 py-4 border-b border-border">
                       <div>
                         <span className="font-bold text-lg">Order #{order.id.slice(0, 8)}</span>
                         <span className="text-sm text-muted-foreground ml-4">
-                          {new Date(order.created_at).toLocaleDateString()}
+                          {new Date(order.created_at).toLocaleString()}
                         </span>
                       </div>
                       <span className="text-sm font-semibold capitalize bg-primary/20 text-black dark:text-primary px-3 py-1 rounded-full">
                         {order.status}
                       </span>
                     </div>
-                    <div className="text-sm text-muted-foreground">
-                      {order.items.length} item(s) — Rs. {Number(order.total).toFixed(2)}
+
+                    <div className="p-6">
+                      <div className="space-y-2 mb-5">
+                        {order.items.map((item, i) => (
+                          <div key={i} className="flex justify-between text-sm bg-muted/30 rounded-xl px-4 py-2.5">
+                            <span className="font-medium">
+                              {item.product_name || item.product_id}
+                              <span className="text-muted-foreground font-normal"> × {item.quantity}</span>
+                            </span>
+                            <span className="font-semibold">Rs. {(item.price * item.quantity).toFixed(2)}</span>
+                          </div>
+                        ))}
+                      </div>
+
+                      {(order.shipping_name || order.shipping_address) && (
+                        <div className="text-sm text-muted-foreground mb-5">
+                          <p className="font-semibold text-foreground mb-1">Shipping to</p>
+                          <p>{order.shipping_name || ''}{order.shipping_phone ? ` — ${order.shipping_phone}` : ''}</p>
+                          <p>{[order.shipping_address, order.shipping_city, order.shipping_zip].filter(Boolean).join(', ') || ''}</p>
+                        </div>
+                      )}
+
+                      <div className="border-t border-border pt-3 flex justify-between font-bold text-lg">
+                        <span>Total</span>
+                        <span>Rs. {Number(order.total).toFixed(2)}</span>
+                      </div>
                     </div>
                   </div>
                 ))}
