@@ -113,7 +113,7 @@ export default function Profile() {
                     <div className="flex items-center justify-between px-6 py-4 border-b border-border">
                       <div>
                         <span className="font-bold text-lg">Order #{order.id.slice(0, 8)}</span>
-                        <span className="text-sm text-muted-foreground ml-4">
+                        <span className="text-sm text-foreground ml-4">
                           {new Date(order.created_at).toLocaleString()}
                         </span>
                       </div>
@@ -126,17 +126,17 @@ export default function Profile() {
                       <div className="space-y-2 mb-5">
                         {order.items.map((item, i) => (
                           <div key={i} className="flex justify-between text-sm bg-muted/30 rounded-xl px-4 py-2.5">
-                            <span className="font-medium">
+                            <span className="font-medium text-foreground">
                               {item.product_name || item.product_id}
-                              <span className="text-muted-foreground font-normal"> × {item.quantity}</span>
+                              <span className="text-foreground font-normal"> × {item.quantity}</span>
                             </span>
-                            <span className="font-semibold">Rs. {(item.price * item.quantity).toFixed(2)}</span>
+                            <span className="font-semibold text-foreground">Rs. {(item.price * item.quantity).toFixed(2)}</span>
                           </div>
                         ))}
                       </div>
 
                       {(order.shipping_name || order.shipping_address) && (
-                        <div className="text-sm text-muted-foreground mb-5">
+                        <div className="text-sm text-foreground mb-5">
                           <p className="font-semibold text-foreground mb-1">Shipping to</p>
                           <p>{order.shipping_name || ''}{order.shipping_phone ? ` — ${order.shipping_phone}` : ''}</p>
                           <p>{[order.shipping_address, order.shipping_city, order.shipping_zip].filter(Boolean).join(', ') || ''}</p>

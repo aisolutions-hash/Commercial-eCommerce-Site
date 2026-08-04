@@ -302,7 +302,7 @@ function ManageOrders() {
                     <span className="font-bold text-lg">Order #{o.id.slice(0, 8)}</span>
                     <StatusBadge status={o.status} />
                   </div>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-foreground">
                     {new Date(o.created_at).toLocaleString()} — {o.items.length} item(s)
                   </p>
                 </div>
@@ -331,29 +331,29 @@ function ManageOrders() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
                 <div>
-                  <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-3">Customer</h4>
+                  <h4 className="text-xs font-bold text-foreground uppercase tracking-wider mb-3">Customer</h4>
                   <div className="space-y-1 text-sm">
                     <p className="font-semibold">{o.user_name || o.shipping_name || '—'}</p>
-                    <p className="text-muted-foreground">{o.user_email || '—'}</p>
-                    <p className="text-muted-foreground flex items-center gap-2">
+                    <p className="text-foreground">{o.user_email || '—'}</p>
+                    <p className="text-foreground flex items-center gap-2">
                       <Phone className="w-3.5 h-3.5" /> {o.shipping_phone || '—'}
                     </p>
                   </div>
 
-                  <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wider mt-5 mb-3">Shipping Address</h4>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
+                  <h4 className="text-xs font-bold text-foreground uppercase tracking-wider mt-5 mb-3">Shipping Address</h4>
+                  <p className="text-sm text-foreground leading-relaxed">
                     {[o.shipping_address, o.shipping_city, o.shipping_zip].filter(Boolean).join(', ') || '—'}
                   </p>
                 </div>
 
                 <div>
-                  <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-3">Items</h4>
+                  <h4 className="text-xs font-bold text-foreground uppercase tracking-wider mb-3">Items</h4>
                   <div className="space-y-2">
                     {o.items.map((item, i) => (
                       <div key={i} className="flex justify-between text-sm bg-muted/30 rounded-xl px-4 py-2">
                         <span className="font-medium line-clamp-1">
                           {item.product_name || item.product_id}
-                          <span className="text-muted-foreground font-normal"> × {item.quantity}</span>
+                          <span className="text-foreground font-normal"> × {item.quantity}</span>
                         </span>
                         <span className="font-semibold shrink-0 ml-3">Rs. {(item.price * item.quantity).toFixed(2)}</span>
                       </div>
