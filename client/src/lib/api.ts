@@ -174,10 +174,10 @@ export async function getProfile(): Promise<UserRead> {
   return request<UserRead>('/users/profile');
 }
 
-export async function placeOrder(items: { product_id: string; quantity: number }[]): Promise<OrderRead> {
+export async function placeOrder(items: { product_id: string; quantity: number }[], shipping?: { name: string; phone: string; address: string; city: string; zip: string }): Promise<OrderRead> {
   return request<OrderRead>('/orders', {
     method: 'POST',
-    body: JSON.stringify({ items }),
+    body: JSON.stringify({ items, shipping: shipping || {} }),
   });
 }
 

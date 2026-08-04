@@ -18,7 +18,8 @@ async def place_order(
 ):
     try:
         items = [item.model_dump() for item in body.items]
-        order = await create_order(db, current_user.id, items)
+        shipping = body.shipping.model_dump() if body.shipping else {}
+        order = await create_order(db, current_user, items, shipping)
         return order
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))

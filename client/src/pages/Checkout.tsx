@@ -13,12 +13,13 @@ export default function Checkout() {
   const [step, setStep] = useState<'cart' | 'shipping' | 'payment' | 'success'>('cart');
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [shipping, setShipping] = useState({ firstName: '', lastName: '', address: '', city: '', zip: '', phone: '' });
   const navigate = useNavigate();
   
   const subtotal = cart.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
   const tax = subtotal * 0.08;
-  const shipping = subtotal > 100 ? 0 : 15;
-  const total = subtotal + tax + shipping;
+  const shippingCost = subtotal > 100 ? 0 : 15;
+  const total = subtotal + tax + shippingCost;
 
   const handleCompleteOrder = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,7 +34,13 @@ export default function Checkout() {
         product_id: item.product.id,
         quantity: item.quantity,
       }));
-      await placeOrder(items);
+      await placeOrder(items, {
+        name: `${shipping.firstName} ${shipping.lastName}`.trim(),
+        phone: shipping.phone,
+        address: shipping.address,
+        city: shipping.city,
+        zip: shipping.zip,
+      });
       clearCart();
       setStep('success');
     } catch (err: any) {
@@ -149,23 +156,27 @@ export default function Checkout() {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="col-span-2 md:col-span-1">
                     <label className="block text-sm font-medium mb-2 text-muted-foreground">First Name</label>
-                    <input required type="text" className="w-full bg-background border border-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary" />
+                    <input required type="text" value={shipping.firstName} onChange={(e) => setShipping({ ...shipping, firstName: e.target.value })} className="w-full bg-background border border-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary" />
                   </div>
                   <div className="col-span-2 md:col-span-1">
                     <label className="block text-sm font-medium mb-2 text-muted-foreground">Last Name</label>
-                    <input required type="text" className="w-full bg-background border border-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary" />
+                    <input required type="text" value={shipping.lastName} onChange={(e) => setShipping({ ...shipping, lastName: e.target.value })} className="w-full bg-background border border-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary" />
                   </div>
                   <div className="col-span-2">
                     <label className="block text-sm font-medium mb-2 text-muted-foreground">Address</label>
-                    <input required type="text" className="w-full bg-background border border-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary" />
+                    <input required type="text" value={shipping.address} onChange={(e) => setShipping({ ...shipping, address: e.target.value })} className="w-full bg-background border border-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary" />
+                  </div>
+                  <div className="col-span-2 md:col-span-1">
+                    <label className="block text-sm font-medium mb-2 text-muted-foreground">Phone</label>
+                    <input required type="tel" placeholder="+91 98765 43210" value={shipping.phone} onChange={(e) => setShipping({ ...shipping, phone: e.target.value })} className="w-full bg-background border border-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary" />
                   </div>
                   <div className="col-span-2 md:col-span-1">
                     <label className="block text-sm font-medium mb-2 text-muted-foreground">City</label>
-                    <input required type="text" className="w-full bg-background border border-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary" />
+                    <input required type="text" value={shipping.city} onChange={(e) => setShipping({ ...shipping, city: e.target.value })} className="w-full bg-background border border-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary" />
                   </div>
                   <div className="col-span-2 md:col-span-1">
                     <label className="block text-sm font-medium mb-2 text-muted-foreground">Zip Code</label>
-                    <input required type="text" className="w-full bg-background border border-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary" />
+                    <input required type="text" value={shipping.zip} onChange={(e) => setShipping({ ...shipping, zip: e.target.value })} className="w-full bg-background border border-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary" />
                   </div>
                 </div>
                 <div className="pt-4 flex justify-end">
@@ -232,7 +243,7 @@ export default function Checkout() {
                   </div>
                   <div className="flex justify-between text-muted-foreground">
                     <span>Shipping</span>
-                    <span className="text-foreground">{shipping === 0 ? 'Free' : `Rs. ${shipping.toFixed(2)}`}</span>
+                    <span className="text-foreground">{shippingCost === 0 ? 'Free' : `Rs. ${shippingCost.toFixed(2)}`}</span>
                   </div>
                   <div className="border-t border-border pt-4 flex justify-between font-bold text-xl">
                     <span>Total</span>

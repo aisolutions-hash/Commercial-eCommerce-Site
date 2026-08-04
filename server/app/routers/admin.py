@@ -15,6 +15,7 @@ from app.models.user import User
 from app.schemas.category import CategoryRead
 from app.schemas.order import OrderRead
 from app.schemas.product import ProductListItem, ProductList, ProductRead
+from app.services.email import send_order_status_email
 
 
 class UserAdminRead(BaseModel):
@@ -191,6 +192,10 @@ async def update_order_status(
         raise HTTPException(status_code=404, detail="Order not found")
     order.status = status
     await db.commit()
+
+    user = await db.get(User, order.user_id)
+    if user:
+        send_order_status_email(order, user.email, user.name)
     return {"status": "ok"}
 
 

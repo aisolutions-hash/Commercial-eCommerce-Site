@@ -72,6 +72,18 @@ async def lifespan(app: FastAPI):
                     await conn.execute(text(f"ALTER TABLE users ADD COLUMN IF NOT EXISTS {col} VARCHAR(255)"))
                 except Exception:
                     pass
+            shipping_cols = {
+                "shipping_name": "VARCHAR(255)",
+                "shipping_phone": "VARCHAR(50)",
+                "shipping_address": "TEXT",
+                "shipping_city": "VARCHAR(255)",
+                "shipping_zip": "VARCHAR(50)",
+            }
+            for col, coltype in shipping_cols.items():
+                try:
+                    await conn.execute(text(f"ALTER TABLE orders ADD COLUMN IF NOT EXISTS {col} {coltype}"))
+                except Exception:
+                    pass
             await conn.execute(text("SELECT 1"))
             logger.info("Database pool warmed up")
     except Exception as e:

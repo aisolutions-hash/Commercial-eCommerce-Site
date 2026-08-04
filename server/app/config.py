@@ -17,6 +17,11 @@ class Settings(BaseSettings):
     app_url: str = Field(default="http://localhost:3000", alias="APP_URL")
     google_client_id: str = Field(default="", alias="GOOGLE_CLIENT_ID")
     google_client_secret: str = Field(default="", alias="GOOGLE_CLIENT_SECRET")
+    smtp_host: str = Field(default="", alias="SMTP_HOST")
+    smtp_port: int = Field(default=587, alias="SMTP_PORT")
+    smtp_user: str = Field(default="", alias="SMTP_USER")
+    smtp_pass: str = Field(default="", alias="SMTP_PASS")
+    notify_email: str = Field(default="", alias="NOTIFY_EMAIL")
 
     class Config:
         env_file = ".env"
