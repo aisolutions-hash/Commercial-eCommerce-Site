@@ -76,7 +76,8 @@ KaliSoft AI Marketplace
 
 
 def send_admin_new_order_email(order, customer_name: str, customer_email: str, shipping: dict) -> None:
-    if not settings.notify_email:
+    recipient = settings.notify_email or settings.smtp_user
+    if not recipient:
         return
     addr = "\n".join(f"  {k}: {v}" for k, v in shipping.items() if v) or "  (not provided)"
     body = f"""NEW ORDER RECEIVED
@@ -93,4 +94,4 @@ Items:
 
 — KaliSoft AI Marketplace bot
 """
-    send_email(settings.notify_email, f"New Order #{order.id[:8].upper()} — {customer_name}", body)
+    send_email(recipient, f"New Order #{order.id[:8].upper()} — {customer_name}", body)
