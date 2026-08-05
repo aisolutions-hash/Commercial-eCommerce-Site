@@ -6,7 +6,6 @@
 - include the samples
 
 
-
 # Done
 - Human reviews: POST /api/products/{id}/reviews + rating summary + submission form + helpful button
 - People also viewed (related products) on product page
