@@ -23,6 +23,14 @@
   calling the same `run_sync()` SQL.
 - Views become BigQuery views with partitioning by `_partition_date`.
 
+## 4. Connectors & MCP (shipped, see CONNECTORS_MCP.md)
+- Internal gateway (table/view allowlist, read-only, PII redaction) and
+  external gateway (https-only, host allowlist, size caps, secret redaction).
+- Dependency-free MCP stdio server exposing `list_connectors` and
+  `fetch_connector`; REST mirror under `/api/admin/connectors/*`.
+- Future: per-connector OAuth (Moglix seller API, IndiaMART seller API),
+  connector health dashboards, audit-log every fetch.
+
 ## 4. Feature roadmap (next sprints)
 | Feature | Status | Branch | Notes |
 |---|---|---|---|

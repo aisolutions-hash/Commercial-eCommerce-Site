@@ -20,7 +20,7 @@ from starlette.responses import Response
 from app.config import settings
 from app.database import Base, engine
 from app.logging_config import setup_logging
-from app.routers import admin, auth, categories, contact, orders, pipeline, products, sales_contacts, users, wishlist
+from app.routers import admin, auth, categories, connectors, contact, orders, pipeline, products, sales_contacts, users, wishlist
 
 setup_logging()
 logger = logging.getLogger(__name__)
@@ -149,6 +149,7 @@ app.include_router(wishlist.router)
 app.include_router(contact.router)
 app.include_router(sales_contacts.router)
 app.include_router(pipeline.router)
+app.include_router(connectors.router)
 
 
 STATIC_DIR = Path(__file__).parent.parent / "static"
