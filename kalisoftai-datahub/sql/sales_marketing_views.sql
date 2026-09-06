@@ -13,7 +13,7 @@ FROM sales_contacts;
 CREATE OR REPLACE VIEW v_marketing_funnel AS
 SELECT lead_source, lead_status,
        COUNT(*) AS leads,
-       ROUND(AVG(ai_score), 1) AS avg_ai_score
+       ROUND(AVG(ai_score)::numeric, 1) AS avg_ai_score
 FROM sales_contacts
 GROUP BY lead_source, lead_status;
 
@@ -21,7 +21,7 @@ CREATE OR REPLACE VIEW v_monthly_sales AS
 SELECT date_trunc('month', created_at)::date AS month,
        COUNT(*) AS orders,
        SUM(total) AS revenue,
-       ROUND(AVG(total), 2) AS avg_order_value
+       ROUND(AVG(total)::numeric, 2) AS avg_order_value
 FROM orders
 WHERE status <> 'cancelled'
 GROUP BY 1

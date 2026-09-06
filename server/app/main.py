@@ -13,6 +13,7 @@ from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIASGIMiddleware
 from slowapi.util import get_remote_address
+from sqlalchemy import text
 from starlette.exceptions import HTTPException
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import Response
@@ -64,7 +65,6 @@ class RequestLoggingMiddleware(BaseHTTPMiddleware):
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     logger.info("Starting application")
-    from sqlalchemy import text
     try:
         async with engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
@@ -73,9 +73,8 @@ async def lifespan(app: FastAPI):
                     await conn.execute(text(f"ALTER TABLE users ADD COLUMN IF NOT EXISTS {col} VARCHAR(255)"))
                 except Exception:
                     pass
-            await _ensure_views(conn)
-            await conn.execute(text("SELECT 1"))
             logger.info("Database pool warmed up")
+        await _ensure_views()
     except Exception as e:
         logger.warning("DB warm-up failed (non-fatal): %s", e)
 
@@ -93,8 +92,9 @@ async def _scheduler_loop(tick):
         await tick()
 
 
-async def _ensure_views(conn):
-    """Additive sales/marketing views over centralized tables. Never breaks pipeline."""
+async def _ensure_views():
+    """Additive sales/marketing views over centralized tables. Never breaks pipeline.
+    Each view runs in its own transaction so one failure never aborts the rest."""
     views = {
         "v_sales_pipeline": """
             CREATE OR REPLACE VIEW v_sales_pipeline AS
@@ -105,18 +105,19 @@ async def _ensure_views(conn):
         "v_marketing_funnel": """
             CREATE OR REPLACE VIEW v_marketing_funnel AS
             SELECT lead_source, lead_status, COUNT(*) AS leads,
-                   ROUND(AVG(ai_score), 1) AS avg_ai_score
+                   ROUND(AVG(ai_score)::numeric, 1) AS avg_ai_score
             FROM sales_contacts GROUP BY lead_source, lead_status""",
         "v_monthly_sales": """
             CREATE OR REPLACE VIEW v_monthly_sales AS
             SELECT date_trunc('month', created_at)::date AS month,
                    COUNT(*) AS orders, SUM(total) AS revenue,
-                   ROUND(AVG(total), 2) AS avg_order_value
+                   ROUND(AVG(total)::numeric, 2) AS avg_order_value
             FROM orders WHERE status <> 'cancelled' GROUP BY 1 ORDER BY 1 DESC""",
     }
     for name, sql in views.items():
         try:
-            await conn.execute(text(sql))
+            async with engine.begin() as conn:
+                await conn.execute(text(sql))
             logger.info("view ensured: %s", name)
         except Exception as e:
             logger.warning("view %s skipped: %s", name, e)
