@@ -1,5 +1,5 @@
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Package, Tags, ShoppingCart, MessageSquare, Users, ExternalLink, LogOut } from 'lucide-react';
+import { LayoutDashboard, Package, Tags, ShoppingCart, MessageSquare, Users, ExternalLink, LogOut, BarChart3, Contact, Workflow } from 'lucide-react';
 import { useStore } from '../store';
 
 const navItems = [
@@ -9,6 +9,9 @@ const navItems = [
   { to: '/admin/orders', icon: ShoppingCart, label: 'Orders' },
   { to: '/admin/inquiries', icon: MessageSquare, label: 'Inquiries' },
   { to: '/admin/users', icon: Users, label: 'Users' },
+  { to: '/admin/sales-contacts', icon: Contact, label: 'Sales Contacts' },
+  { to: '/admin/sales-insights', icon: BarChart3, label: 'Sales Insights' },
+  { to: '/admin/ai-pipeline', icon: Workflow, label: 'AI Pipeline' },
 ];
 
 export default function AdminLayout() {

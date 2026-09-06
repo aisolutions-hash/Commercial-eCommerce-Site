@@ -5,7 +5,7 @@ export interface Category {
   name: string;
   description: string;
   image: string;
-  section?: 'packaging' | 'ai-solutions';
+  section?: 'packaging' | 'ai-solutions' | 'electronics';
 }
 
 export interface Review {
@@ -31,6 +31,11 @@ export interface Product {
   isContactForPrice?: boolean;
   moq?: number;
   uom?: string;
+  discountPercent?: number;
+  discountedPrice?: number;
+  aiFeatures?: string[];
+  specifications?: Record<string, string>;
+  packagingOptions?: string[];
 }
 
 export interface CartItem {

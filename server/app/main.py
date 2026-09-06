@@ -1,3 +1,4 @@
+import asyncio
 import logging
 import os
 import time
@@ -19,7 +20,7 @@ from starlette.responses import Response
 from app.config import settings
 from app.database import Base, engine
 from app.logging_config import setup_logging
-from app.routers import admin, auth, categories, contact, orders, products, users, wishlist
+from app.routers import admin, auth, categories, contact, orders, pipeline, products, sales_contacts, users, wishlist
 
 setup_logging()
 logger = logging.getLogger(__name__)
@@ -72,13 +73,53 @@ async def lifespan(app: FastAPI):
                     await conn.execute(text(f"ALTER TABLE users ADD COLUMN IF NOT EXISTS {col} VARCHAR(255)"))
                 except Exception:
                     pass
+            await _ensure_views(conn)
             await conn.execute(text("SELECT 1"))
             logger.info("Database pool warmed up")
     except Exception as e:
         logger.warning("DB warm-up failed (non-fatal): %s", e)
+
+    from app.services.syncer import scheduler_tick
+    task = asyncio.create_task(_scheduler_loop(scheduler_tick))
     yield
+    task.cancel()
     logger.info("Shutting down application")
     await engine.dispose()
+
+
+async def _scheduler_loop(tick):
+    while True:
+        await asyncio.sleep(60)
+        await tick()
+
+
+async def _ensure_views(conn):
+    """Additive sales/marketing views over centralized tables. Never breaks pipeline."""
+    views = {
+        "v_sales_pipeline": """
+            CREATE OR REPLACE VIEW v_sales_pipeline AS
+            SELECT contact_id, first_name || ' ' || last_name AS full_name, company_name,
+                   company_type, industry, lead_status, lead_priority, ai_score,
+                   deal_value, next_followup_at, assigned_to
+            FROM sales_contacts""",
+        "v_marketing_funnel": """
+            CREATE OR REPLACE VIEW v_marketing_funnel AS
+            SELECT lead_source, lead_status, COUNT(*) AS leads,
+                   ROUND(AVG(ai_score), 1) AS avg_ai_score
+            FROM sales_contacts GROUP BY lead_source, lead_status""",
+        "v_monthly_sales": """
+            CREATE OR REPLACE VIEW v_monthly_sales AS
+            SELECT date_trunc('month', created_at)::date AS month,
+                   COUNT(*) AS orders, SUM(total) AS revenue,
+                   ROUND(AVG(total), 2) AS avg_order_value
+            FROM orders WHERE status <> 'cancelled' GROUP BY 1 ORDER BY 1 DESC""",
+    }
+    for name, sql in views.items():
+        try:
+            await conn.execute(text(sql))
+            logger.info("view ensured: %s", name)
+        except Exception as e:
+            logger.warning("view %s skipped: %s", name, e)
 
 
 app = FastAPI(title="KaliSoft AI Marketplace API", version="1.0.0", lifespan=lifespan)
@@ -106,6 +147,8 @@ app.include_router(users.router)
 app.include_router(orders.router)
 app.include_router(wishlist.router)
 app.include_router(contact.router)
+app.include_router(sales_contacts.router)
+app.include_router(pipeline.router)
 
 
 STATIC_DIR = Path(__file__).parent.parent / "static"

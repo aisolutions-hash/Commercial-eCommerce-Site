@@ -22,6 +22,7 @@ const OAuthCallback = lazy(() => import('./pages/OAuthCallback'));
 const Profile = lazy(() => import('./pages/Profile'));
 const AdminLayout = lazy(() => import('./components/AdminLayout'));
 const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
+const AiPipeline = lazy(() => import('./pages/AiPipeline'));
 
 function PageLoader() {
   return (
@@ -88,6 +89,9 @@ export default function App() {
           <Route path="orders" element={<AdminDashboard />} />
           <Route path="inquiries" element={<AdminDashboard />} />
           <Route path="users" element={<AdminDashboard />} />
+          <Route path="sales-contacts" element={<AdminDashboard />} />
+          <Route path="sales-insights" element={<AdminDashboard />} />
+          <Route path="ai-pipeline" element={<AiPipeline />} />
           </Route>
         </Routes>
       </Suspense>

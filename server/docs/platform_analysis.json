@@ -1,0 +1,204 @@
+{
+  "generated_at": "2026-09-06T19:09:53.393311",
+  "moglix": {
+    "name": "Moglix",
+    "url": "https://www.moglix.com",
+    "business_model": "Full-stack B2B marketplace with managed inventory, supply-chain finance (Credlix), and enterprise SaaS",
+    "revenue_streams": [
+      "Direct product sales (~85% of revenue) - industrial MRO and manufacturing supplies",
+      "Supply-chain finance via Credlix (~12% and growing) - interest spreads and processing fees",
+      "Enterprise SaaS (Moglix Enterprise Solution) - recurring subscriptions",
+      "Logistics-as-a-Service - fulfillment and warehousing fees",
+      "Marketplace advertising - sponsored products, native ads, premium placements",
+      "Tiered marketplace fees - fulfillment, premium seller plans"
+    ],
+    "ad_formats": [
+      {
+        "name": "Sponsored Product Ads",
+        "description": "Display products prominently in search results or category pages to attract buyers",
+        "placement": "Search results, category pages",
+        "target_audience": "Sellers wanting visibility among high-intent B2B buyers",
+        "pricing_model": "CPC/CPM"
+      },
+      {
+        "name": "Product Native Ads",
+        "description": "Display brand SKUs on competitor pages and Homepage for more visits",
+        "placement": "Competitor product pages, Homepage",
+        "target_audience": "Brands targeting competitor audiences",
+        "pricing_model": "CPC/CPM"
+      },
+      {
+        "name": "Top Seller Tags",
+        "description": "Fixed placement on category pages for any 5 SKUs shared by brand",
+        "placement": "Category listing pages (fixed position)",
+        "target_audience": "Brands wanting category-level visibility",
+        "pricing_model": "CPC/CPM"
+      },
+      {
+        "name": "M-Certified Badge",
+        "description": "Moglix certified placement with high-quality images, content, videos",
+        "placement": "Product detail pages (MSN listings)",
+        "target_audience": "Premium brands wanting trust signals",
+        "pricing_model": "CPC/CPM"
+      },
+      {
+        "name": "Next Day Delivery Tag",
+        "description": "Priority delivery badge for products meeting fulfillment criteria",
+        "placement": "Product listings, search results",
+        "target_audience": "Sellers with strong logistics infrastructure",
+        "pricing_model": "CPC/CPM"
+      },
+      {
+        "name": "Display Ads (Off-Site)",
+        "description": "Google and Meta display ads for brand awareness and performance",
+        "placement": "Google Display Network, Meta platforms",
+        "target_audience": "Brands wanting off-platform reach",
+        "pricing_model": "CPC/CPM"
+      },
+      {
+        "name": "Audience Marketing",
+        "description": "Custom ads using customer database insights (interests, behaviors, purchase history)",
+        "placement": "Google, Meta - targeted audience segments",
+        "target_audience": "Brands targeting specific buyer personas",
+        "pricing_model": "CPC/CPM"
+      },
+      {
+        "name": "Re-Marketing",
+        "description": "Show ads repeatedly to users who showed interest in products",
+        "placement": "Criteo, RevX, RTB House networks",
+        "target_audience": "Brands retargeting warm leads",
+        "pricing_model": "CPC/CPM"
+      }
+    ],
+    "key_features": [
+      "M-Certified product listings with enhanced content",
+      "AI-driven demand forecasting and inventory management",
+      "40+ fulfillment centers for 95% on-time delivery",
+      "Credlix supply-chain finance for supplier payments",
+      "Proprietary tech stack for procurement automation",
+      "Private-label manufacturing for higher margins",
+      "Enterprise SaaS for large buyer integration",
+      "24 hrs Delivery",
+      "Electrical & Appliances",
+      "Office Supplies",
+      "Industrial Tools",
+      "Medical & Lab Supplies",
+      "Agri & Gardening",
+      "Safety Supplies",
+      "Construction Materials",
+      "Packaging & Material Handling",
+      "Mogli Express",
+      "Moglix Ads is a advertising platform by Moglix to help sellers maximize visibility and reach buyers efficiently. Tailored for B2B needs, it drives gro",
+      "Benefits of Moglix Ads Solution",
+      "With Moglix Ads, you can expect2X growth",
+      "Product Visibility",
+      "Place your products in front of high-intent B2B buyers",
+      "Conversion Rates",
+      "Boost your sales with data-driven targeting and retargeting strategies",
+      "Brand Awareness",
+      "Grow your brand’s reach within key business categories"
+    ],
+    "target_market": "B2B - Manufacturing, Infrastructure, Automotive, FMCG enterprises & MSMEs",
+    "monthly_users": "1 Crore+ avg monthly active users",
+    "sku_count": "700,000+ SKUs across 1,500 categories",
+    "supplier_count": "2 Lakh+ suppliers",
+    "strengths": [
+      "Full-stack model controls entire supply chain",
+      "Strong logistics network (40+ fulfillment centers)",
+      "Diversified revenue (commerce + finance + SaaS)",
+      "High supplier trust with M-Certified program",
+      "Data-driven ad targeting with purchase history",
+      "Unicorn status ($2.51B valuation) enables scaling"
+    ],
+    "weaknesses": [
+      "High return rates (~20%) in marketplace model",
+      "Still operating at a loss (FY25: -$11.3M)",
+      "Complex compliance for medical/safety products",
+      "Dependency on imported supplies (China risk)"
+    ]
+  },
+  "indiamart": {
+    "name": "IndiaMART",
+    "url": "https://www.indiamart.com",
+    "business_model": "B2B marketplace connecting buyers with suppliers through listings, lead generation, and premium subscriptions",
+    "revenue_streams": [
+      "Lead Generation subscriptions (IndiaMART Lead Manager)",
+      "Premium supplier memberships (TrustSEAL, Verified Supplier)",
+      "Display advertising on platform",
+      "Export facilitation services",
+      "Mobile app monetization",
+      "Data analytics services for buyers"
+    ],
+    "ad_formats": [
+      {
+        "name": "Featured Supplier Listings",
+        "description": "Premium placement in search results and category pages with priority ranking",
+        "placement": "Search results, category pages (top positions)",
+        "target_audience": "Suppliers wanting maximum visibility",
+        "pricing_model": "CPC/CPM"
+      },
+      {
+        "name": "TrustSEAL Verified Badge",
+        "description": "Government-verified business identity badge for trust building",
+        "placement": "Supplier profiles, product listings",
+        "target_audience": "Suppliers wanting credibility signals",
+        "pricing_model": "CPC/CPM"
+      },
+      {
+        "name": "Product Listings Ads",
+        "description": "Enhanced product listings with priority in search rankings",
+        "placement": "Search results, category pages",
+        "target_audience": "Suppliers promoting specific products",
+        "pricing_model": "CPC/CPM"
+      },
+      {
+        "name": "Display Banner Ads",
+        "description": "Banner advertisements across platform pages",
+        "placement": "Homepage, category pages, search results",
+        "target_audience": "Brands wanting awareness campaigns",
+        "pricing_model": "CPC/CPM"
+      },
+      {
+        "name": "Lead Manager Premium",
+        "description": "Priority access to buyer inquiries and contact details",
+        "placement": "Lead management dashboard",
+        "target_audience": "Suppliers wanting direct buyer contacts",
+        "pricing_model": "CPC/CPM"
+      },
+      {
+        "name": "Export Promotion",
+        "description": "Featured placement in export-specific sections and international directories",
+        "placement": "Export.indiamart.com, international listings",
+        "target_audience": "Exporters targeting global buyers",
+        "pricing_model": "CPC/CPM"
+      }
+    ],
+    "key_features": [
+      "Largest B2B marketplace in India (160M+ monthly visitors)",
+      "Government-verified TrustSEAL program",
+      "AI-powered buyer-seller matching",
+      "Lead Manager CRM for suppliers",
+      "Mobile-first approach with dedicated apps",
+      "Pan-India and international reach",
+      "Video product demonstrations"
+    ],
+    "target_market": "B2B - Indian manufacturers, suppliers, exporters across all industries",
+    "monthly_users": "160+ million monthly unique visitors",
+    "sku_count": "19+ million product listings",
+    "supplier_count": "1.9+ million suppliers",
+    "strengths": [
+      "Massive user base (160M+ monthly visitors)",
+      "Strong brand recognition in Indian B2B market",
+      "Government verification (TrustSEAL) builds trust",
+      "Comprehensive lead management system",
+      "Strong mobile presence",
+      "Long operational history (since 1996)"
+    ],
+    "weaknesses": [
+      "Quality control challenges with large supplier base",
+      "Competition from newer, tech-first platforms",
+      "Dependency on subscription revenue model",
+      "Less focus on logistics/fulfillment"
+    ]
+  }
+}
